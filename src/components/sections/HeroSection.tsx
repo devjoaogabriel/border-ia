@@ -55,31 +55,33 @@ export function HeroSection() {
           <div className="hero-haze absolute inset-x-0 -top-[225px] h-[570px]" />
         </div>
 
-        {/* Recorta só os lados e a base: em cima sobra espaço para o card inclinar. */}
         <div
           id="sobre"
-          className="relative -mx-[22px] h-[446px] scroll-mt-24 overflow-x-clip [clip-path:inset(-24px_0_0_0)] lg:mx-0 lg:mt-[140px] lg:h-auto lg:overflow-x-visible lg:[clip-path:none]"
+          className="relative -mx-[22px] h-[446px] scroll-mt-24 lg:mx-0 lg:mt-[140px] lg:h-auto"
         >
-          <DotMatrixDecor
-            variant="css"
-            className="top-[-8px] left-0 h-[120px] w-[240px] opacity-60 lg:hidden"
-          />
-          {/* O SVG tem 865px de altura: o design mostra 660px, com fade linear até o fundo. */}
-          <div
-            data-m="window"
-            className="absolute top-[71px] left-[23px] w-[725px] max-w-none lg:static lg:w-full lg:max-w-[1216px]"
-          >
-            {/* Camada própria: o parallax fica no pai e a máscara não repinta a cada frame. */}
-            <div data-m="window-float" className="will-change-transform">
-              <Image
-                src="/images/hero-figma-ui.svg"
-                alt="Interface do Figma com a estrutura de camadas de um projeto"
-                width={1216}
-                height={660}
-                unoptimized
-                priority
-                className="block aspect-[1216/660] w-full rounded-lg object-cover object-top [mask-image:linear-gradient(to_bottom,#000,transparent)] lg:rounded-xl"
-              />
+          {/* O recorte fica só aqui: nenhum pai do card pode cortar, porque ele inclina em 3D. */}
+          <div className="absolute inset-0 overflow-hidden lg:static lg:overflow-visible">
+            <DotMatrixDecor
+              variant="css"
+              className="top-[-8px] left-0 h-[120px] w-[240px] opacity-60 lg:hidden"
+            />
+            {/* O SVG tem 865px de altura: o design mostra 660px, com fade linear até o fundo. */}
+            <div
+              data-m="window"
+              className="absolute top-[71px] left-[23px] w-[725px] max-w-none lg:static lg:w-full lg:max-w-[1216px]"
+            >
+              {/* Camada própria: o parallax fica no pai e a máscara não repinta a cada frame. */}
+              <div data-m="window-float" className="will-change-transform">
+                <Image
+                  src="/images/hero-figma-ui.svg"
+                  alt="Interface do Figma com a estrutura de camadas de um projeto"
+                  width={1216}
+                  height={660}
+                  unoptimized
+                  priority
+                  className="block aspect-[1216/660] w-full rounded-lg object-cover object-top [mask-image:linear-gradient(to_bottom,#000,transparent)] lg:rounded-xl"
+                />
+              </div>
             </div>
           </div>
 
