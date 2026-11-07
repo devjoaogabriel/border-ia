@@ -210,7 +210,7 @@ export function MagicCopyCard({ className = "" }: { className?: string }) {
       >
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute right-[34px] bottom-0 left-[34px] h-[195px] rounded-full bg-indigo-10/35 blur-[50px]"
+          className="card-haze pointer-events-none absolute inset-0"
         />
         <div
           data-card-glow

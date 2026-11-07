@@ -107,6 +107,33 @@ body {
     letter-spacing: 0.01em;
   }
 
+  /* Halos medidos no frame Mobile. As paradas aproximam uma curva gaussiana. */
+  .hero-haze {
+    background: radial-gradient(
+      ellipse 480px 285px at 45% 50%,
+      rgb(150 118 255 / 0.23),
+      rgb(150 118 255 / 0.2) 17%,
+      rgb(150 118 255 / 0.14) 33%,
+      rgb(150 118 255 / 0.074) 50%,
+      rgb(150 118 255 / 0.031) 67%,
+      rgb(150 118 255 / 0.01) 83%,
+      transparent
+    );
+  }
+
+  .card-haze {
+    background: radial-gradient(
+      circle 270px at 50% 85%,
+      rgb(150 115 255 / 0.26),
+      rgb(150 115 255 / 0.229) 17%,
+      rgb(150 115 255 / 0.159) 33%,
+      rgb(150 115 255 / 0.083) 50%,
+      rgb(150 115 255 / 0.035) 67%,
+      rgb(150 115 255 / 0.011) 83%,
+      transparent
+    );
+  }
+
   .text-gradient {
     background-image: var(--gradient-linear-degrade);
     background-clip: text;

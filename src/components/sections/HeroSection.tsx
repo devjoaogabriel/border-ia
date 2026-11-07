@@ -47,14 +47,19 @@ export function HeroSection() {
           </div>
         </div>
 
+        {/* Fora do #sobre porque o halo sobe por trás do texto, além do recorte. */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none relative -mx-[22px] mt-12 h-0 lg:hidden"
+        >
+          <div className="hero-haze absolute inset-x-0 -top-[225px] h-[570px]" />
+        </div>
+
+        {/* Recorta só os lados e a base: em cima sobra espaço para o card inclinar. */}
         <div
           id="sobre"
-          className="relative -mx-[22px] mt-12 h-[446px] scroll-mt-24 overflow-hidden lg:mx-0 lg:mt-[140px] lg:h-auto lg:overflow-visible"
+          className="relative -mx-[22px] h-[446px] scroll-mt-24 overflow-x-clip [clip-path:inset(-24px_0_0_0)] lg:mx-0 lg:mt-[140px] lg:h-auto lg:overflow-x-visible lg:[clip-path:none]"
         >
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-x-0 top-0 h-[180px] bg-[radial-gradient(60%_100%_at_60%_40%,rgb(88_25_138/0.28),transparent)] lg:hidden"
-          />
           <DotMatrixDecor
             variant="css"
             className="top-[-8px] left-0 h-[120px] w-[240px] opacity-60 lg:hidden"
