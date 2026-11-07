@@ -36,6 +36,19 @@ export function LandingMotionController({ children }: { children: ReactNode }) {
           scrollTrigger: { trigger: "#sobre", scrub: true },
         });
 
+        const float = window.matchMedia("(min-width: 1024px)").matches ? 6 : 4;
+        const windowFloat = gsap.fromTo(
+          "[data-m='window-float']",
+          { y: float },
+          { y: -float, duration: 2.4, ease: "sine.inOut", repeat: -1, yoyo: true },
+        );
+        ScrollTrigger.create({
+          trigger: "#sobre",
+          start: "top bottom",
+          end: "bottom top",
+          onToggle: ({ isActive }) => windowFloat.paused(!isActive),
+        });
+
         gsap.from("[data-m='feat-head']", {
           ...REVEAL,
           scrollTrigger: { trigger: "#recursos", start: "top 80%", once: true },

@@ -3,7 +3,13 @@
 import { useRef, useState } from "react";
 import { PluginPrismLogoLazy } from "@/components/three/PluginPrismLogoLazy";
 import { COPY_CONTRACT } from "@/lib/constants";
-import { beamPulse, Draggable, gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
+import {
+  beamPulse,
+  gsap,
+  heroCardMotion,
+  ScrollTrigger,
+  useGSAP,
+} from "@/lib/gsap";
 import type {
   CardTiltInteractionState,
   CardTiltPhysicsConfig,
@@ -20,12 +26,11 @@ const TILT: CardTiltPhysicsConfig = {
     { rotationX: 1.6, rotationY: 2.8, rotation: -0.4 },
     { rotationX: 0, rotationY: 0, rotation: 0 },
   ],
-  dragMinMovementPx: 6,
-  dragMaxRotateX: 14,
-  dragMaxRotateY: 16,
-  dragPressScale: 1.015,
-  dragFollowSec: 0.12,
-  reboundSec: 0.9,
+  hoverMaxRotateX: 10,
+  hoverMaxRotateY: 12,
+  hoverFollowSec: 0.28,
+  hoverCtaDamping: 0.35,
+  reboundSec: 0.85,
   reboundEase: "elastic.out(1, 0.45)",
 };
 
@@ -43,7 +48,7 @@ export function MagicCopyCard({ className = "" }: { className?: string }) {
       mm.add(
         {
           canAnimate: "(prefers-reduced-motion: no-preference)",
-          canDrag:
+          canHover:
             "(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)",
         },
         (context) => {
@@ -91,11 +96,18 @@ export function MagicCopyCard({ className = "" }: { className?: string }) {
           },
         });
 
-        let stopDrag = () => {};
-        if (context.conditions?.canDrag) {
-          let startX = 0;
-          let startY = 0;
-          let box = card.getBoundingClientRect();
+        // O feixe lê estes ângulos para manter a ponta presa ao card.
+        const read = gsap.getProperty(card);
+        const syncMotion = () => {
+          heroCardMotion.rotationX = read("rotationX") as number;
+          heroCardMotion.rotationY = read("rotationY") as number;
+          heroCardMotion.rotation = read("rotation") as number;
+        };
+        gsap.ticker.add(syncMotion);
+
+        let stopHover = () => {};
+        if (context.conditions?.canHover) {
+          const stage = rootRef.current!;
           let tilt: gsap.core.Tween | undefined;
           // Sem overwrite do GSAP: ele apagaria trechos da timeline do balance pausada.
           const tiltTo = (vars: gsap.TweenVars) => {
@@ -103,64 +115,61 @@ export function MagicCopyCard({ className = "" }: { className?: string }) {
             tilt = gsap.to(card, vars);
           };
 
-          const [drag] = Draggable.create(document.createElement("div"), {
-            trigger: card,
-            type: "x,y",
-            minimumMovement: TILT.dragMinMovementPx,
-            dragClickables: false,
-            cursor: "grab",
-            activeCursor: "grabbing",
-            onDragStart() {
-              state = "dragging";
-              balance.pause();
-              startX = drag.pointerX;
-              startY = drag.pointerY;
-              box = card.getBoundingClientRect();
-            },
-            onDrag() {
-              const normX = (drag.pointerX - startX) / Math.max(box.width / 2, 120);
-              const normY = (drag.pointerY - startY) / Math.max(box.height / 2, 150);
-              tiltTo({
-                rotationY: Math.tanh(normX * 1.35) * TILT.dragMaxRotateY,
-                rotationX: -Math.tanh(normY * 1.35) * TILT.dragMaxRotateX,
-                rotation: 0,
-                scale: TILT.dragPressScale,
-                duration: TILT.dragFollowSec,
-                ease: "power2.out",
-              });
-            },
-            onDragEnd() {
-              state = "rebounding";
-              tiltTo({
-                rotationX: 0,
-                rotationY: 0,
-                rotation: 0,
-                scale: 1,
-                duration: TILT.reboundSec,
-                ease: TILT.reboundEase,
-                onComplete: () => {
-                  state = "balancing";
-                  if (inViewport) balance.restart();
-                },
-              });
-            },
-          });
-
-          const onBlur = () => {
-            if (drag.isDragging) drag.endDrag(new PointerEvent("pointerup"));
+          // Medido no palco, que não inclina: a borda do hover não treme com o card.
+          const onMove = (event: PointerEvent) => {
+            if (event.pointerType !== "mouse") return;
+            state = "hovering";
+            balance.pause();
+            const box = stage.getBoundingClientRect();
+            const normX = ((event.clientX - box.left) / box.width) * 2 - 1;
+            const normY = ((event.clientY - box.top) / box.height) * 2 - 1;
+            const overCta = buttonRef.current?.contains(event.target as Node);
+            const gain = overCta ? TILT.hoverCtaDamping : 1;
+            tiltTo({
+              rotationY: Math.tanh(normX * 1.15) * TILT.hoverMaxRotateY * gain,
+              rotationX: -Math.tanh(normY * 1.15) * TILT.hoverMaxRotateX * gain,
+              rotation: 0,
+              duration: TILT.hoverFollowSec,
+              ease: "power2.out",
+            });
           };
-          window.addEventListener("blur", onBlur);
-          stopDrag = () => {
-            window.removeEventListener("blur", onBlur);
-            drag.kill();
+
+          const onLeave = () => {
+            if (state !== "hovering") return;
+            state = "rebounding";
+            tiltTo({
+              rotationX: 0,
+              rotationY: 0,
+              rotation: 0,
+              duration: TILT.reboundSec,
+              ease: TILT.reboundEase,
+              onComplete: () => {
+                state = "balancing";
+                if (inViewport) balance.restart();
+                else balance.pause(0);
+              },
+            });
+          };
+
+          stage.addEventListener("pointerenter", onMove);
+          stage.addEventListener("pointermove", onMove);
+          stage.addEventListener("pointerleave", onLeave);
+          window.addEventListener("blur", onLeave);
+          stopHover = () => {
+            stage.removeEventListener("pointerenter", onMove);
+            stage.removeEventListener("pointermove", onMove);
+            stage.removeEventListener("pointerleave", onLeave);
+            window.removeEventListener("blur", onLeave);
           };
         }
 
         return () => {
-          stopDrag();
+          stopHover();
+          gsap.ticker.remove(syncMotion);
           visibility.kill();
           gsap.killTweensOf(card);
-          gsap.set(card, { clearProps: "transform,cursor,userSelect,touchAction" });
+          gsap.set(card, { clearProps: "transform" });
+          Object.assign(heroCardMotion, { rotationX: 0, rotationY: 0, rotation: 0 });
           spinRef.current = null;
           beamPulse.value = 0;
         };
@@ -200,7 +209,7 @@ export function MagicCopyCard({ className = "" }: { className?: string }) {
     <div
       ref={rootRef}
       data-card-stage
-      className={`relative z-10 [perspective:900px] ${className}`}
+      className={`relative isolate z-10 [perspective:900px] ${className}`}
     >
       <div
         ref={cardRef}

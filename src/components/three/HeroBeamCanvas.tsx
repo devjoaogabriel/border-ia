@@ -3,7 +3,7 @@
 import { Canvas, useFrame } from "@react-three/fiber";
 import { useMemo, useRef } from "react";
 import { NoBlending, type ShaderMaterial } from "three";
-import { beamPulse } from "@/lib/gsap";
+import { beamPulse, heroCardMotion } from "@/lib/gsap";
 
 const vertexShader = /* glsl */ `
   varying vec2 vUv;
@@ -19,6 +19,9 @@ const fragmentShader = /* glsl */ `
   uniform float uPulse;
   uniform float uTime;
   uniform vec2 uSize;
+  uniform float uBendX;
+  uniform float uTipX;
+  uniform float uTipY;
 
   float hash(vec2 p) {
     return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
@@ -26,13 +29,17 @@ const fragmentShader = /* glsl */ `
 
   void main() {
     vec2 px = vec2((vUv.x - 0.5) * uSize.x, (1.0 - vUv.y) * uSize.y);
-    float y = 1.0 - vUv.y;
     float dist = abs(px.x);
 
-    float running = step(0.001, uPulse) * step(uPulse, 0.999);
-    float trail = smoothstep(uPulse - 0.3, uPulse, y) * smoothstep(uPulse + 0.05, uPulse, y) * running;
-    float core = exp(-dist * dist / 10.0);
-    float halo = exp(-dist / 30.0) * 0.32;
+    // Mesma curva de Bézier do path SVG: em y ela é linear, então t sai direto da altura.
+    float t = clamp(px.y / max(uTipY, 1.0), 0.0, 1.0);
+    float curveX = 3.0 * (1.0 - t) * t * t * uBendX + t * t * t * uTipX;
+    float beamDist = abs(px.x - curveX);
+
+    float running = step(0.001, uPulse) * step(uPulse, 0.999) * step(px.y, uTipY);
+    float trail = smoothstep(uPulse - 0.3, uPulse, t) * smoothstep(uPulse + 0.05, uPulse, t) * running;
+    float core = exp(-beamDist * beamDist / 10.0);
+    float halo = exp(-beamDist / 30.0) * 0.32;
     float beam = (core + halo) * trail;
 
     vec2 cell = floor(px / 19.0);
@@ -57,6 +64,9 @@ function BeamPlane({ width, height }: { width: number; height: number }) {
       uPulse: { value: 0 },
       uTime: { value: 0 },
       uSize: { value: [width, height] },
+      uBendX: { value: 0 },
+      uTipX: { value: 0 },
+      uTipY: { value: heroCardMotion.tipY },
     }),
     [width, height],
   );
@@ -66,6 +76,9 @@ function BeamPlane({ width, height }: { width: number; height: number }) {
     if (!material) return;
     material.uniforms.uPulse.value = beamPulse.value;
     material.uniforms.uTime.value = clock.elapsedTime;
+    material.uniforms.uBendX.value = heroCardMotion.bendX;
+    material.uniforms.uTipX.value = heroCardMotion.tipX;
+    material.uniforms.uTipY.value = heroCardMotion.tipY;
   });
 
   return (

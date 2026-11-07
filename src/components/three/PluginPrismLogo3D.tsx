@@ -6,7 +6,7 @@ import { ExtrudeGeometry, type Group, MathUtils } from "three";
 import { SVGLoader } from "three/addons/loaders/SVGLoader.js";
 import { LOGO_MARK } from "@/lib/constants";
 
-const MAX_TILT = MathUtils.degToRad(8);
+const MAX_TILT = MathUtils.degToRad(4.5);
 const DEPTH = 5;
 
 function createPrism(d: string) {

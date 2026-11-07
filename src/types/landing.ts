@@ -49,16 +49,15 @@ export interface CopyContract {
   footer: { creditLabel: string; creditAuthor: string };
 }
 
-export type CardTiltInteractionState = "balancing" | "dragging" | "rebounding";
+export type CardTiltInteractionState = "balancing" | "hovering" | "rebounding";
 
 export interface CardTiltPhysicsConfig {
   balanceSegmentSec: number;
   balanceKeyframes: readonly { rotationX: number; rotationY: number; rotation: number }[];
-  dragMinMovementPx: number;
-  dragMaxRotateX: number;
-  dragMaxRotateY: number;
-  dragPressScale: number;
-  dragFollowSec: number;
+  hoverMaxRotateX: number;
+  hoverMaxRotateY: number;
+  hoverFollowSec: number;
+  hoverCtaDamping: number;
   reboundSec: number;
   reboundEase: string;
 }
