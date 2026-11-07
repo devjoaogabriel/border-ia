@@ -10,29 +10,13 @@ import {
   ScrollTrigger,
   useGSAP,
 } from "@/lib/gsap";
-import type {
-  CardTiltInteractionState,
-  CardTiltPhysicsConfig,
-} from "@/types/landing";
+import { CARD_TILT_CONFIG, computeCardHoverAngles } from "@/lib/card-tilt-math";
+import type { CardTiltInteractionState } from "@/types/landing";
 import { MaskIcon } from "./MaskIcon";
 
 const REDUCE = "(prefers-reduced-motion: reduce)";
 
-const TILT: CardTiltPhysicsConfig = {
-  balanceSegmentSec: 1.4,
-  balanceKeyframes: [
-    { rotationX: 2, rotationY: -2.8, rotation: -0.5 },
-    { rotationX: -1.4, rotationY: 2.4, rotation: 0.6 },
-    { rotationX: 1.6, rotationY: 2.8, rotation: -0.4 },
-    { rotationX: 0, rotationY: 0, rotation: 0 },
-  ],
-  hoverMaxRotateX: 10,
-  hoverMaxRotateY: 12,
-  hoverFollowSec: 0.28,
-  hoverCtaDamping: 0.35,
-  reboundSec: 0.85,
-  reboundEase: "elastic.out(1, 0.45)",
-};
+const TILT = CARD_TILT_CONFIG;
 
 export function MagicCopyCard({ className = "" }: { className?: string }) {
   const { pluginCard } = COPY_CONTRACT;
@@ -124,10 +108,8 @@ export function MagicCopyCard({ className = "" }: { className?: string }) {
             const normX = ((event.clientX - box.left) / box.width) * 2 - 1;
             const normY = ((event.clientY - box.top) / box.height) * 2 - 1;
             const overCta = buttonRef.current?.contains(event.target as Node);
-            const gain = overCta ? TILT.hoverCtaDamping : 1;
             tiltTo({
-              rotationY: Math.tanh(normX * 1.15) * TILT.hoverMaxRotateY * gain,
-              rotationX: -Math.tanh(normY * 1.15) * TILT.hoverMaxRotateX * gain,
+              ...computeCardHoverAngles(normX, normY, Boolean(overCta)),
               rotation: 0,
               duration: TILT.hoverFollowSec,
               ease: "power2.out",

@@ -25,7 +25,7 @@ description: "TDD task list for 007-testes-vitest implementation"
 
 **Purpose**: Capturar a linha de base limpa do commit `333c3a4` nunca medida nas specs `005` e `006`, garantindo comparacao real de performance Mobile e Desktop antes das mudancas da `007`.
 
-- [ ] T001 Medir e registrar a mediana de 3 execucoes do Lighthouse Mobile e Desktop sobre o build de producao da base limpa `333c3a4` (usando `git stash push -u` temporario e `git stash pop` imediato) conforme `specs/007-testes-vitest/quickstart.md` e `specs/006-onda-e-malha-cursor/tasks.md`
+- [x] T001 Medir e registrar a mediana de 3 execucoes do Lighthouse Mobile e Desktop sobre o build de producao da base limpa `333c3a4` (usando `git stash push -u` temporario e `git stash pop` imediato) conforme `specs/007-testes-vitest/quickstart.md` e `specs/006-onda-e-malha-cursor/tasks.md`
 
 ---
 
@@ -33,7 +33,7 @@ description: "TDD task list for 007-testes-vitest implementation"
 
 **Purpose**: Confirmar a configuracao existente do runner sem adicionar pacotes ao `package.json`.
 
-- [ ] T002 Auditar `vitest.config.ts` (`environment: "node"`, alias `@/` para `./src`, padrao `src/**/*.test.{ts,tsx}`) e criar a pasta `src/security/` mantendo `package.json` sem `jsdom` nem `@testing-library/react`
+- [x] T002 Auditar `vitest.config.ts` (`environment: "node"`, alias `@/` para `./src`, padrao `src/**/*.test.{ts,tsx}`) e criar a pasta `src/security/` mantendo `package.json` sem `jsdom` nem `@testing-library/react`
 
 **Checkpoint**: Baseline registrada e runner pronto para iniciar os ciclos Red-Green-Refactor.
 
@@ -47,15 +47,15 @@ description: "TDD task list for 007-testes-vitest implementation"
 
 ### Tests for User Story 1 (RED - escrever primeiro e assistir falhar)
 
-- [ ] T003 [P] [US1] Escrever os testes de desempenho e hibernacao do cursor (`484` celulas, `168` descartes em `OUTER_CUTOFF = 40`, matriz `BAYER`, `MAX_ALPHA <= 0.9`, expansao `+22%`, `dt` grampeado em `0.05s` e convergencia para `rafId = -1`) em `src/lib/cursor-mesh-math.test.ts` e executar `npx vitest run src/lib/cursor-mesh-math.test.ts` confirmando falha RED
-- [ ] T004 [P] [US1] Escrever os testes de projecao 3D da ponta da corda (`tipX = 0, tipY = 511` em repouso, simetria `±rotationY`), convergencia estavel de `stepBeamSpring` ate `dt = 0.05s` e validade de `beamPath` em `src/lib/hero-beam-math.test.ts` e executar `npx vitest run src/lib/hero-beam-math.test.ts` confirmando falha RED
-- [ ] T005 [P] [US1] Escrever os testes da curva `Math.tanh`, tetos `10`/`12` graus e atenuacao `hoverCtaDamping = 0.35` em `src/lib/card-tilt-math.test.ts` e executar `npx vitest run src/lib/card-tilt-math.test.ts` confirmando falha RED
+- [x] T003 [P] [US1] Escrever os testes de desempenho e hibernacao do cursor (`484` celulas, `168` descartes em `OUTER_CUTOFF = 40`, matriz `BAYER`, `MAX_ALPHA <= 0.9`, expansao `+22%`, `dt` grampeado em `0.05s` e convergencia para `rafId = -1`) em `src/lib/cursor-mesh-math.test.ts` e executar `npx vitest run src/lib/cursor-mesh-math.test.ts` confirmando falha RED
+- [x] T004 [P] [US1] Escrever os testes de projecao 3D da ponta da corda (`tipX = 0, tipY = 511` em repouso, simetria `±rotationY`), convergencia estavel de `stepBeamSpring` ate `dt = 0.05s` e validade de `beamPath` em `src/lib/hero-beam-math.test.ts` e executar `npx vitest run src/lib/hero-beam-math.test.ts` confirmando falha RED
+- [x] T005 [P] [US1] Escrever os testes da curva `Math.tanh`, tetos `10`/`12` graus e atenuacao `hoverCtaDamping = 0.35` em `src/lib/card-tilt-math.test.ts` e executar `npx vitest run src/lib/card-tilt-math.test.ts` confirmando falha RED
 
 ### Implementation for User Story 1 (GREEN + REFACTOR)
 
-- [ ] T006 [P] [US1] Extrair as constantes e funcoes puras (`smoothstep`, `approach`, `createInitialCursorState`, `computeCursorCellAlpha`, `advanceCursorMeshState`) para `src/lib/cursor-mesh-math.ts`, reconectar `src/components/motion/CursorDotMesh.tsx` e confirmar GREEN em `src/lib/cursor-mesh-math.test.ts`
-- [ ] T007 [P] [US1] Extrair `BEAM_GEOMETRY`, `beamPath`, `BEAM_REST_PATH`, `projectBeamContact` e `stepBeamSpring` para `src/lib/hero-beam-math.ts`, reconectar `src/components/three/HeroBeamLazy.tsx` e `src/lib/gsap.ts` (`tipY: BEAM_GEOMETRY.BEAM_REST_TIP`) e confirmar GREEN em `src/lib/hero-beam-math.test.ts`
-- [ ] T008 [P] [US1] Extrair `CARD_TILT_CONFIG` e `computeCardHoverAngles` para `src/lib/card-tilt-math.ts`, reconectar `src/components/ui/MagicCopyCard.tsx` e confirmar GREEN em `src/lib/card-tilt-math.test.ts`
+- [x] T006 [P] [US1] Extrair as constantes e funcoes puras (`smoothstep`, `approach`, `createInitialCursorState`, `computeCursorCellAlpha`, `advanceCursorMeshState`) para `src/lib/cursor-mesh-math.ts`, reconectar `src/components/motion/CursorDotMesh.tsx` e confirmar GREEN em `src/lib/cursor-mesh-math.test.ts`
+- [x] T007 [P] [US1] Extrair `BEAM_GEOMETRY`, `beamPath`, `BEAM_REST_PATH`, `projectBeamContact` e `stepBeamSpring` para `src/lib/hero-beam-math.ts`, reconectar `src/components/three/HeroBeamLazy.tsx` e `src/lib/gsap.ts` (`tipY: BEAM_GEOMETRY.BEAM_REST_TIP`) e confirmar GREEN em `src/lib/hero-beam-math.test.ts`
+- [x] T008 [P] [US1] Extrair `CARD_TILT_CONFIG` e `computeCardHoverAngles` para `src/lib/card-tilt-math.ts`, reconectar `src/components/ui/MagicCopyCard.tsx` e confirmar GREEN em `src/lib/card-tilt-math.test.ts`
 
 **Checkpoint**: User Story 1 concluida; todos os calculos de animacao testados em `node` sem alterar um unico pixel na interface.
 
@@ -69,15 +69,15 @@ description: "TDD task list for 007-testes-vitest implementation"
 
 ### Tests for User Story 2 (RED - escrever primeiro e assistir falhar)
 
-- [ ] T009 [P] [US2] Escrever os testes de `resolveSiteLinkAttributes` e de integridade de `SITE_LINKS` (exigindo `https://` + `target="_blank"` + `rel="noopener noreferrer"` quando `external: true`, `#anchor` quando `external: false`, erro em `javascript:`/`data:`/`http:` e verificacao de `public/icons/social-${id}.svg`) em `src/lib/links.test.ts` e confirmar falha RED no Vitest
-- [ ] T010 [P] [US2] Escrever os testes de `buildMaskStyle` (allowlist `/^\/icons\/[a-z0-9-]+\.svg$/i`, aspas em `url("...")`, rejeicao de `..`, espacos, parenteses, `;` e URLs externas) e validacao dos paths de `LOGO_MARK` em `src/lib/mask-style.test.ts` e confirmar falha RED no Vitest
+- [x] T009 [P] [US2] Escrever os testes de `resolveSiteLinkAttributes` e de integridade de `SITE_LINKS` (exigindo `https://` + `target="_blank"` + `rel="noopener noreferrer"` quando `external: true`, `#anchor` quando `external: false`, erro em `javascript:`/`data:`/`http:` e verificacao de `public/icons/social-${id}.svg`) em `src/lib/links.test.ts` e confirmar falha RED no Vitest
+- [x] T010 [P] [US2] Escrever os testes de `buildMaskStyle` (allowlist `/^\/icons\/[a-z0-9-]+\.svg$/i`, aspas em `url("...")`, rejeicao de `..`, espacos, parenteses, `;` e URLs externas) e validacao dos paths de `LOGO_MARK` em `src/lib/mask-style.test.ts` e confirmar falha RED no Vitest
 
 ### Implementation & Repository Guards for User Story 2 (GREEN + REFACTOR)
 
-- [ ] T011 [P] [US2] Implementar `resolveSiteLinkAttributes` em `src/lib/links.ts`, reconectar `src/components/ui/CtaButton.tsx`, `src/components/sections/Header.tsx` e `src/components/sections/Footer.tsx`, e confirmar GREEN em `src/lib/links.test.ts`
-- [ ] T012 [P] [US2] Implementar `buildMaskStyle` em `src/lib/mask-style.ts`, reconectar `src/components/ui/MaskIcon.tsx`, e confirmar GREEN em `src/lib/mask-style.test.ts`
-- [ ] T013 [P] [US2] Implementar o validador puro de markup SVG e a suite que inspeciona todos os `.svg` em `public/` e `src/app/` (testando primeiro que o validador rejeita fixtures com `<script>`, `<foreignObject>`, `onload=` e `https://evil.example` antes de aprovar os `13` SVGs reais) em `src/security/svg-assets.test.ts`
-- [ ] T014 [P] [US2] Implementar a suite de invariantes de seguranca sobre `src/**/*.{ts,tsx}`, `.gitignore` e `next.config.ts` (zero `dangerouslySetInnerHTML`, `innerHTML`, `outerHTML`, `eval(`, `new Function(`, `document.write(`, `process.env` e `\u2014`; `rel="noopener noreferrer"` junto a `target="_blank"`; `.env*` em `.gitignore`; `dangerouslyAllowSVG !== true`) em `src/security/source-and-config.test.ts`
+- [x] T011 [P] [US2] Implementar `resolveSiteLinkAttributes` em `src/lib/links.ts`, reconectar `src/components/ui/CtaButton.tsx`, `src/components/sections/Header.tsx` e `src/components/sections/Footer.tsx`, e confirmar GREEN em `src/lib/links.test.ts`
+- [x] T012 [P] [US2] Implementar `buildMaskStyle` em `src/lib/mask-style.ts`, reconectar `src/components/ui/MaskIcon.tsx`, e confirmar GREEN em `src/lib/mask-style.test.ts`
+- [x] T013 [P] [US2] Implementar o validador puro de markup SVG e a suite que inspeciona todos os `.svg` em `public/` e `src/app/` (testando primeiro que o validador rejeita fixtures com `<script>`, `<foreignObject>`, `onload=` e `https://evil.example` antes de aprovar os `13` SVGs reais) em `src/security/svg-assets.test.ts`
+- [x] T014 [P] [US2] Implementar a suite de invariantes de seguranca sobre `src/**/*.{ts,tsx}`, `.gitignore` e `next.config.ts` (zero `dangerouslySetInnerHTML`, `innerHTML`, `outerHTML`, `eval(`, `new Function(`, `document.write(`, `process.env` e `\u2014`; `rel="noopener noreferrer"` junto a `target="_blank"`; `.env*` em `.gitignore`; `dangerouslyAllowSVG !== true`) em `src/security/source-and-config.test.ts`
 
 **Checkpoint**: User Story 2 concluida; todas as invariantes de seguranca automatizadas em `npm test`.
 
@@ -91,8 +91,8 @@ description: "TDD task list for 007-testes-vitest implementation"
 
 ### Implementation for User Story 3
 
-- [ ] T015 [US3] Criar e validar a suite de escalabilidade e orcamento estatico (`CANVAS_WIDTH === 504` sem overflow em `1024px`, teto constante de `1.058.400` fragmentos em `4K` `dpr=2`, `484` celulas no cursor, existencia de todos os arquivos de `FEATURE_ITEMS` e `SOCIAL_PROOF_AVATARS` em `public/`, `@property --shine-angle` com `inherits: false` e `paused` em `src/app/globals.css`) em `src/lib/scalability-budget.test.ts`
-- [ ] T016 [US3] Medir a mediana de 3 execucoes do Lighthouse Mobile e Desktop sobre o build de producao final (`depois`), marcar `T001` e `T010` em `specs/006-onda-e-malha-cursor/tasks.md` e registrar a tabela comparativa `antes vs depois` conforme `specs/007-testes-vitest/quickstart.md`
+- [x] T015 [US3] Criar e validar a suite de escalabilidade e orcamento estatico (`CANVAS_WIDTH === 504` sem overflow em `1024px`, teto constante de `1.058.400` fragmentos em `4K` `dpr=2`, `484` celulas no cursor, existencia de todos os arquivos de `FEATURE_ITEMS` e `SOCIAL_PROOF_AVATARS` em `public/`, `@property --shine-angle` com `inherits: false` e `paused` em `src/app/globals.css`) em `src/lib/scalability-budget.test.ts`
+- [x] T016 [US3] Medir a mediana de 3 execucoes do Lighthouse Mobile e Desktop sobre o build de producao final (`depois`), marcar `T001` e `T010` em `specs/006-onda-e-malha-cursor/tasks.md` e registrar a tabela comparativa `antes vs depois` conforme `specs/007-testes-vitest/quickstart.md`
 
 **Checkpoint**: Todas as tres User Stories (`US1`, `US2`, `US3`) completas.
 
@@ -102,7 +102,7 @@ description: "TDD task list for 007-testes-vitest implementation"
 
 **Purpose**: Executar a verificacao fresca integral exigida pela skill `verification-before-completion` antes de emitir qualquer declaracao de pronto.
 
-- [ ] T017 Executar na sessao final `npm test`, `npm run lint` e `npm run build` confirmando codigo `0` e `8/8` suites verdes, auditar `git diff` garantindo zero dependencias novas em `package.json` e zero ocorrencias de travessao (`U+2014`), e reportar as evidencias literais de saida
+- [x] T017 Executar na sessao final `npm test`, `npm run lint` e `npm run build` confirmando codigo `0` e `8/8` suites verdes, auditar `git diff` garantindo zero dependencias novas em `package.json` e zero ocorrencias de travessao (`U+2014`), e reportar as evidencias literais de saida
 
 ---
 
@@ -121,3 +121,19 @@ description: "TDD task list for 007-testes-vitest implementation"
 - **Lista separada (`jsdom` + `@testing-library/react`)**: NAO instalar nem implementar testes `jsdom` a menos que o Joao aprove expressamente a instalacao dessas duas `devDependencies`.
 - **Governanca Git**: Trabalhar direto na `main`, sem criar branch, sem `git commit` e sem `git push`.
 - **Regra anti-travessao**: Zero ocorrencias de `U+2014` em qualquer arquivo.
+
+---
+
+## Resultado do Lighthouse (T001 e T016)
+
+Medido em 2026-11-07 com `lighthouse@12.8.2` (headless, throttling simulado), build de produção em `localhost:3099`, mediana de 3 rodadas.
+
+| Cenário | Performance | A11y | Best Practices | SEO | LCP | TBT | CLS |
+|---|---|---|---|---|---|---|---|
+| Mobile `333c3a4` (antes) | 54 (52/54/55) | 100 | 100 | 100 | 4369 ms | 3571 ms | 0 |
+| Mobile atual (depois) | 52 (51/52/55) | 100 | 100 | 100 | 4638 ms | 5569 ms | 0 |
+| Desktop `333c3a4` (antes) | 74 (70/74/77) | 100 | 100 | 100 | 938 ms | 625 ms | 0 |
+| Desktop atual (depois) | 72 (72/72/68) | 100 | 100 | 100 | 963 ms | 725 ms | 0 |
+
+- O TBT Mobile subiu nas 3 rodadas (antes 4014/3571/3228, depois 5569/4434/8123). O aumento está na execução de script do chunk do React (hidratação), não no Three.js nem no shader. A causa não foi isolada e fica para a próxima spec, junto com o CR-02 (Three.js baixado no Mobile).
+- O "antes" foi medido restaurando o `src` de `333c3a4` na árvore de trabalho, em vez do `git stash`, porque a árvore estava limpa depois do commit `333e124`.

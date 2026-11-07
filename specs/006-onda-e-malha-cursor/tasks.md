@@ -25,7 +25,7 @@ description: "Task list for 006-onda-e-malha-cursor implementation (synchronized
 
 **Purpose**: Registrar a linha de base de performance da `main` limpa (`333c3a4`) para comparacao objetiva de Lighthouse Mobile e Desktop (`FR-013`, `SC-005`).
 
-- [ ] T001 Medir e registrar a mediana de 3 execucoes do Lighthouse Mobile e Desktop sobre o build de producao da base limpa `333c3a4` (usando `git stash push -u` temporario e `git stash pop` imediato para preservar o diff local) conforme roteiro em `specs/006-onda-e-malha-cursor/quickstart.md`
+- [x] T001 Medir e registrar a mediana de 3 execucoes do Lighthouse Mobile e Desktop sobre o build de producao da base limpa `333c3a4` (usando `git stash push -u` temporario e `git stash pop` imediato para preservar o diff local) conforme roteiro em `specs/006-onda-e-malha-cursor/quickstart.md`
 
 ---
 
@@ -89,7 +89,7 @@ description: "Task list for 006-onda-e-malha-cursor implementation (synchronized
 **Purpose**: Validacao cruzada em Chromium e WebKit (Desktop e iPhone), verificacao de lint/tipos/build e comparativo Lighthouse antes/depois.
 
 - [x] T009 Executar `npm run lint`, verificacao de tipos e `npm run build` com zero erros e validar os cenarios interativos e responsivos em Playwright Chromium e Playwright WebKit (`1440x900`, `1024x768`, `390x844` e `430x932`)
-- [ ] T010 Medir a mediana de 3 execucoes do Lighthouse Mobile e Desktop pos-implementacao (confirmando notas >= baseline de `T001` conforme `specs/006-onda-e-malha-cursor/quickstart.md`) e auditar `git diff` garantindo zero ocorrencias de travessao (`U+2014`)
+- [x] T010 Medir a mediana de 3 execucoes do Lighthouse Mobile e Desktop pos-implementacao (confirmando notas >= baseline de `T001` conforme `specs/006-onda-e-malha-cursor/quickstart.md`) e auditar `git diff` garantindo zero ocorrencias de travessao (`U+2014`)
 
 ---
 

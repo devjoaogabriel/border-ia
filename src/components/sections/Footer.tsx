@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { BorderIaLogo } from "@/components/ui/BorderIaLogo";
 import { COPY_CONTRACT, SITE_LINKS } from "@/lib/constants";
+import { resolveSiteLinkAttributes } from "@/lib/links";
 
 export function Footer() {
   const { footer } = COPY_CONTRACT;
@@ -16,9 +17,7 @@ export function Footer() {
             {SITE_LINKS.socialLinks.map((link) => (
               <li key={link.id}>
                 <a
-                  href={link.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  {...resolveSiteLinkAttributes(link)}
                   aria-label={link.ariaLabel}
                   className="flex size-12 items-center justify-center rounded border border-gray-09 bg-gray-10 transition duration-300 hover:-translate-y-0.5 hover:border-gray-08"
                 >

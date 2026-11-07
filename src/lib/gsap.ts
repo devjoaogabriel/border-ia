@@ -2,6 +2,7 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { BEAM_GEOMETRY } from "./hero-beam-math";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(useGSAP, ScrollTrigger, DrawSVGPlugin);
@@ -18,7 +19,7 @@ export const heroCardMotion = {
   rotation: 0,
   bendX: 0,
   tipX: 0,
-  tipY: 511,
+  tipY: BEAM_GEOMETRY.BEAM_REST_TIP,
 };
 
 export { DrawSVGPlugin, gsap, ScrollTrigger, useGSAP };

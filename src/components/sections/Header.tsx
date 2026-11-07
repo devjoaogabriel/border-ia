@@ -1,6 +1,7 @@
 import { BorderIaLogo } from "@/components/ui/BorderIaLogo";
 import { CtaButton } from "@/components/ui/CtaButton";
 import { SITE_LINKS } from "@/lib/constants";
+import { resolveSiteLinkAttributes } from "@/lib/links";
 
 export function Header() {
   return (
@@ -13,7 +14,7 @@ export function Header() {
               {SITE_LINKS.navItems.map((item) => (
                 <li key={item.id}>
                   <a
-                    href={item.href}
+                    {...resolveSiteLinkAttributes(item)}
                     className="transition-colors duration-300 hover:text-gray-01"
                   >
                     {item.label}

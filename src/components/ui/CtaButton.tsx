@@ -1,3 +1,4 @@
+import { resolveSiteLinkAttributes } from "@/lib/links";
 import type { SiteLink } from "@/types/landing";
 import { MaskIcon } from "./MaskIcon";
 
@@ -20,8 +21,7 @@ interface CtaButtonProps {
 export function CtaButton({ link, variant, icon, className = "" }: CtaButtonProps) {
   return (
     <a
-      href={link.href}
-      {...(link.external && { target: "_blank", rel: "noopener noreferrer" })}
+      {...resolveSiteLinkAttributes(link)}
       className={`btn-shine inline-flex shrink-0 items-center justify-center rounded text-[14px] leading-[1.3] font-medium tracking-[0.01em] whitespace-nowrap uppercase transition duration-300 ${VARIANTS[variant]} ${className}`}
     >
       {icon && <MaskIcon src={icon} />}
