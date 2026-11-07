@@ -2,6 +2,7 @@
 
 import { type ReactNode, useRef } from "react";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
+import { CursorDotMesh } from "./CursorDotMesh";
 
 const REVEAL = { autoAlpha: 0, y: 24, duration: 0.8, ease: "power3.out" };
 
@@ -110,5 +111,10 @@ export function LandingMotionController({ children }: { children: ReactNode }) {
     { scope: rootRef },
   );
 
-  return <div ref={rootRef}>{children}</div>;
+  return (
+    <div ref={rootRef}>
+      <CursorDotMesh />
+      {children}
+    </div>
+  );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { DotMatrixDecor } from "@/components/ui/DotMatrixDecor";
 import {
   useInViewport,
@@ -21,6 +21,12 @@ const BEAM_HEIGHT = BEAM_VISIBLE_HEIGHT + BEAM_OVERLAP;
 const BEAM_CENTER = BEAM_WIDTH / 2;
 const BEAM_TUCK = 14;
 const BEAM_REST_TIP = BEAM_VISIBLE_HEIGHT + BEAM_TUCK;
+
+// A malha vai do fio até o fim de "criação" no H1 (243px) e espelha para a direita.
+// 13 células de 19px: os pontos ficam simétricos em relação ao fio.
+const MESH_HALF_WIDTH = 247;
+// 5px de folga por lado: cobre os pontos sem passar da tela em 1024px.
+const CANVAS_WIDTH = MESH_HALF_WIDTH * 2 + 10;
 
 // Ponto do topo do card onde a linha encosta, a partir do centro do card.
 const CONTACT_X = -65;
@@ -50,6 +56,7 @@ export function HeroBeamLazy() {
   const { reduceMotion } = useMotionEnvironment();
   const isDesktop = useMediaQuery("(min-width: 1024px)");
   const connected = isDesktop && !reduceMotion;
+  const [canvasReady, setCanvasReady] = useState(false);
 
   useEffect(() => {
     const path = pathRef.current;
@@ -99,7 +106,11 @@ export function HeroBeamLazy() {
       style={{ width: BEAM_WIDTH, height: BEAM_HEIGHT }}
     >
       <div className="absolute -inset-x-10 top-0 bottom-7 bg-[radial-gradient(50%_85%_at_50%_10%,rgb(122_103_255/0.22),transparent)]" />
-      <DotMatrixDecor variant="css" className="inset-x-[60px] top-[60px] bottom-7" />
+      {/* Primeiro paint e movimento reduzido. Com o canvas pronto, o shader desenha estes pontos. */}
+      <DotMatrixDecor
+        variant="css"
+        className={`-inset-x-[77px] top-[60px] bottom-7 ${connected && canvasReady ? "opacity-0" : ""}`}
+      />
       <svg
         width={BEAM_WIDTH}
         height={BEAM_HEIGHT}
@@ -131,13 +142,20 @@ export function HeroBeamLazy() {
         />
       </svg>
       {connected && (
-        <WebGLSafeBoundary>
-          <HeroBeamCanvas
-            isActive={inViewport}
-            width={BEAM_WIDTH}
-            height={BEAM_HEIGHT}
-          />
-        </WebGLSafeBoundary>
+        <div
+          className="absolute top-0"
+          style={{ left: BEAM_CENTER - CANVAS_WIDTH / 2, width: CANVAS_WIDTH, height: BEAM_HEIGHT }}
+        >
+          <WebGLSafeBoundary>
+            <HeroBeamCanvas
+              isActive={inViewport}
+              width={CANVAS_WIDTH}
+              height={BEAM_HEIGHT}
+              meshHalfWidth={MESH_HALF_WIDTH}
+              onReady={() => setCanvasReady(true)}
+            />
+          </WebGLSafeBoundary>
+        </div>
       )}
     </div>
   );

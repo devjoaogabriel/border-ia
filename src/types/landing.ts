@@ -66,3 +66,17 @@ export interface MotionEnvironment {
   reduceMotion: boolean;
   canHover: boolean;
 }
+
+/** Malha pontilhada que segue o ponteiro na página. Vive num ref: zero re-render por quadro. */
+export interface CursorMeshRuntimeState {
+  targetX: number;
+  targetY: number;
+  x: number;
+  y: number;
+  presence: number;
+  targetPresence: number;
+  interactive: number;
+  targetInteractive: number;
+  elapsed: number;
+  rafId: number;
+}

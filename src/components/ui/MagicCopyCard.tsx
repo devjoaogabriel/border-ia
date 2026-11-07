@@ -286,7 +286,7 @@ export function MagicCopyCard({ className = "" }: { className?: string }) {
           <button
             ref={buttonRef}
             type="button"
-            className="mt-[27px] flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded text-[16px] font-medium tracking-[0.01em] text-white transition duration-300 [background-image:var(--gradient-linear-degrade)] hover:brightness-110"
+            className="btn-shine mt-[27px] flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded text-[16px] font-medium tracking-[0.01em] text-white transition duration-300 [background-image:var(--gradient-linear-degrade)] hover:brightness-110"
           >
             <MaskIcon src="/icons/feature-bg-remover.svg" />
             {pluginCard.cta}
