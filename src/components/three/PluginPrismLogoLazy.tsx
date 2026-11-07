@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import { useRef, useState } from "react";
 import { BorderIaMark } from "@/components/ui/BorderIaLogo";
 import {
+  useDeferredStart,
   useInViewport,
   useMotionEnvironment,
 } from "@/hooks/useMotionEnvironment";
@@ -18,12 +19,13 @@ export function PluginPrismLogoLazy({ burstSignal }: { burstSignal: number }) {
   const inViewport = useInViewport(rootRef);
   const { reduceMotion, canHover } = useMotionEnvironment();
   const [ready, setReady] = useState(false);
+  const started = useDeferredStart();
   const show3D = ready && !reduceMotion;
 
   return (
     <div ref={rootRef} className="relative h-10 w-14">
       <BorderIaMark className={show3D ? "opacity-0" : ""} />
-      {!reduceMotion && (
+      {started && !reduceMotion && (
         <div className="absolute -inset-3">
           <WebGLSafeBoundary>
             <PluginPrismLogo3D

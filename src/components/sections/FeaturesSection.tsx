@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { GlowingEffect } from "@/components/ui/21st/GlowingEffect";
 import { AnimatedStrokeWord } from "@/components/ui/AnimatedStrokeWord";
 import { TagBadge } from "@/components/ui/TagBadge";
 import { COPY_CONTRACT, FEATURE_ITEMS } from "@/lib/constants";
@@ -34,9 +35,10 @@ export function FeaturesSection() {
             <li
               key={item.id}
               data-m="feat-card"
-              className="group mx-auto flex max-w-[330px] flex-col items-center gap-4 text-center lg:mx-0 lg:max-w-none lg:items-start lg:text-left"
+              className="group relative mx-auto flex max-w-[330px] flex-col items-center gap-4 text-center lg:mx-0 lg:max-w-none lg:items-start lg:text-left"
             >
-              <div className="flex size-12 items-center justify-center rounded border border-gray-09 bg-gray-10 transition-transform duration-300 group-hover:-translate-y-0.5">
+              <GlowingEffect />
+              <div className="flex size-12 items-center justify-center rounded border border-gray-09 bg-gray-10 motion-safe:transition-transform motion-safe:duration-300 motion-safe:group-hover:-translate-y-0.5">
                 <Image
                   src={item.iconPath}
                   alt=""

@@ -1,4 +1,7 @@
+import { MotionSafeWrapper } from "@/components/motion/MotionSafeWrapper";
+import { cn } from "@/lib/utils";
 import type { SiteLink } from "@/types/landing";
+import { ShinyButton } from "./21st/ShinyButton";
 import { MaskIcon } from "./MaskIcon";
 
 const VARIANTS = {
@@ -18,14 +21,27 @@ interface CtaButtonProps {
 }
 
 export function CtaButton({ link, variant, icon, className = "" }: CtaButtonProps) {
-  return (
+  const isPrimary = variant === "primary-gradient";
+  const anchor = (
     <a
       href={link.href}
       {...(link.external && { target: "_blank", rel: "noopener noreferrer" })}
-      className={`inline-flex shrink-0 items-center justify-center rounded text-[14px] leading-[1.3] font-medium tracking-[0.01em] whitespace-nowrap uppercase transition duration-300 ${VARIANTS[variant]} ${className}`}
+      className={cn(
+        "relative inline-flex shrink-0 items-center justify-center rounded text-[14px] leading-[1.3] font-medium tracking-[0.01em] whitespace-nowrap uppercase motion-safe:transition motion-safe:duration-300",
+        VARIANTS[variant],
+        className,
+      )}
     >
+      {isPrimary && <ShinyButton />}
       {icon && <MaskIcon src={icon} />}
       {link.label}
     </a>
+  );
+  return isPrimary ? (
+    <MotionSafeWrapper observeVisibility className="inline-flex">
+      {anchor}
+    </MotionSafeWrapper>
+  ) : (
+    anchor
   );
 }

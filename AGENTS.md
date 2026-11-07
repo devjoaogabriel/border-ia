@@ -29,7 +29,7 @@ Landing page do plugin de Figma Border-IA. Vale para o agy e para o Claude Code.
 - Base Desktop: node `307:78` (1440px). Base Mobile: node `335:10650` (430px).
 - `Desktop V2` e `Mobile V2` são idênticos à V1. Ignore.
 - Tokens, tipografia, copy e assets: página Documentação, node `21:3195`.
-- Fidelidade: antes de `get_design_context`, carregue a skill `figma-design-to-code`. O screenshot do node é o alvo visual. Assets baixados para o projeto, sem URL temporária do Figma no código.
+- Fidelidade: antes de `get_design_context`, carregue a skill `figma-design-to-code`. O screenshot do node é o alvo visual base, com exceção explícita dos desvios e elevações da `21st.dev` aprovados pelo João Gabriel em `specs/002-design-polish-21st/` (mantendo paleta, tipografia e decisões de copy). Assets baixados para o projeto, sem URL temporária do Figma no código.
 
 ## Decisões de conteúdo
 
@@ -41,11 +41,12 @@ Landing page do plugin de Figma Border-IA. Vale para o agy e para o Claude Code.
 
 ## Stack
 
-- Next.js (App Router), React, TypeScript, Tailwind CSS. Gerenciador: npm.
-- Movimento: GSAP com `@gsap/react` (timelines, ScrollTrigger, traçado de SVG). Skills `gsap-*`.
+- Next.js (App Router), React, TypeScript, Tailwind CSS e `shadcn/ui` (mapeado para os tokens `gray-*`, `purple-*` e `indigo-*`). Gerenciador: npm.
+- Componentes de UI elevados: `21st.dev` adaptados aos tokens, fonte e copy do projeto.
+- Movimento: GSAP com `@gsap/react` (timelines, ScrollTrigger, traçado de SVG; skills `gsap-*`) e `motion` (Framer Motion) restrito aos componentes da `21st.dev` que dependem dele.
 - Scroll suave: Lenis.
 - Shapes realistas: Three.js com `@react-three/fiber`, só onde o efeito pedir 3D ou shader.
-- Toda animação respeita `prefers-reduced-motion`. Código 3D carrega sob demanda, sem pesar o primeiro paint.
+- Toda animação (GSAP, `motion` e hovers CSS) respeita `prefers-reduced-motion` com estado final estático. Código 3D e componentes pesados carregam sob demanda, sem pesar o primeiro paint (Lighthouse Performance >= 90).
 
 ## Skills do projeto
 

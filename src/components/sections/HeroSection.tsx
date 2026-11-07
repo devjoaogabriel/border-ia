@@ -33,13 +33,13 @@ export function HeroSection() {
               {hero.description}
             </p>
             {/* O frame Mobile 335:10650 não tem o botão no hero. */}
-            <span data-m="hero-text" className="hidden lg:block">
+            <div data-m="hero-text" className="hidden lg:block">
               <CtaButton
                 link={SITE_LINKS.ctas.usarNoFigma}
                 variant="primary-gradient"
                 icon="/icons/figma-mark.svg"
               />
-            </span>
+            </div>
           </div>
         </div>
 

@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { PluginPrismLogoLazy } from "@/components/three/PluginPrismLogoLazy";
 import { COPY_CONTRACT } from "@/lib/constants";
 import { beamPulse, gsap, useGSAP } from "@/lib/gsap";
+import { AnimatedBorder } from "./21st/AnimatedBorder";
 import { MaskIcon } from "./MaskIcon";
 
 const REDUCE = "(prefers-reduced-motion: reduce)";
@@ -13,6 +14,7 @@ export function MagicCopyCard({ className = "" }: { className?: string }) {
   const rootRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const spinRef = useRef<gsap.core.Tween | null>(null);
+  const pulseRef = useRef<gsap.core.Timeline | null>(null);
   const [burstSignal, setBurstSignal] = useState(0);
 
   useGSAP(
@@ -27,21 +29,36 @@ export function MagicCopyCard({ className = "" }: { className?: string }) {
           repeat: -1,
         });
         // O pulso desce pelo feixe e acende a borda do card ao chegar.
-        gsap
+        pulseRef.current = gsap
           .timeline({ repeat: -1, repeatDelay: 3, delay: 0.9 })
           .fromTo(
             beamPulse,
             { value: 0 },
             { value: 1, duration: 1.4, ease: "power2.in" },
           )
+          .addLabel("arrive")
           .fromTo(
             "[data-card-glow]",
             { opacity: 0 },
             { opacity: 1, duration: 0.18 },
           )
-          .to("[data-card-glow]", { opacity: 0, duration: 0.9 });
+          .to("[data-card-glow]", { opacity: 0, duration: 0.9 })
+          .fromTo(
+            "[data-card-ring]",
+            { "--ring-angle": "0deg" },
+            { "--ring-angle": "360deg", duration: 1.08, ease: "power1.inOut" },
+            "arrive",
+          )
+          .fromTo(
+            "[data-card-ring]",
+            { opacity: 0 },
+            { opacity: 1, duration: 0.18 },
+            "arrive",
+          )
+          .to("[data-card-ring]", { opacity: 0, duration: 0.3 }, "arrive+=0.78");
         return () => {
           spinRef.current = null;
+          pulseRef.current = null;
           beamPulse.value = 0;
         };
       });
@@ -56,6 +73,8 @@ export function MagicCopyCard({ className = "" }: { className?: string }) {
           );
           return;
         }
+        // Volta o relógio único do pulso, então borda e brilho nunca rodam em duplicidade.
+        pulseRef.current?.seek("arrive");
         const burst = { duration: 1.1, ease: "power2.out", overwrite: true };
         gsap.fromTo("[data-card-burst]", { opacity: 1 }, { opacity: 0, ...burst });
         gsap.fromTo(
@@ -96,6 +115,8 @@ export function MagicCopyCard({ className = "" }: { className?: string }) {
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 rounded-xl opacity-0 shadow-[inset_0_0_44px_rgb(167_81_251/0.9)]"
       />
+
+      <AnimatedBorder />
 
       <div className="relative">
         <div className="flex h-10 items-center justify-between">
@@ -151,7 +172,7 @@ export function MagicCopyCard({ className = "" }: { className?: string }) {
         <button
           ref={buttonRef}
           type="button"
-          className="mt-[27px] flex h-12 w-full items-center justify-center gap-2 rounded text-[16px] font-medium tracking-[0.01em] text-white transition duration-300 [background-image:var(--gradient-linear-degrade)] hover:brightness-110"
+          className="mt-[27px] flex h-12 w-full items-center justify-center gap-2 rounded text-[16px] font-medium tracking-[0.01em] text-white motion-safe:transition motion-safe:duration-300 [background-image:var(--gradient-linear-degrade)] hover:brightness-110"
         >
           <MaskIcon src="/icons/feature-bg-remover.svg" />
           {pluginCard.cta}

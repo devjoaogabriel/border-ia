@@ -22,6 +22,24 @@ export function useMotionEnvironment(): MotionEnvironment {
   };
 }
 
+// Adia código pesado até a primeira interação ou o fim do tempo, fora do primeiro paint.
+export function useDeferredStart(timeoutMs = 6000): boolean {
+  const [started, setStarted] = useState(false);
+  useEffect(() => {
+    const events = ["pointerdown", "pointermove", "wheel", "touchstart", "keydown"];
+    const start = () => setStarted(true);
+    const timer = setTimeout(start, timeoutMs);
+    events.forEach((name) =>
+      window.addEventListener(name, start, { once: true, passive: true }),
+    );
+    return () => {
+      clearTimeout(timer);
+      events.forEach((name) => window.removeEventListener(name, start));
+    };
+  }, [timeoutMs]);
+  return started;
+}
+
 export function useInViewport(ref: RefObject<Element | null>): boolean {
   const [inViewport, setInViewport] = useState(false);
   useEffect(() => {

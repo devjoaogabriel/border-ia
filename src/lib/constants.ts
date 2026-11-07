@@ -3,6 +3,7 @@ import type {
   FeatureItem,
   SiteLinksConfig,
   SocialProofAvatar,
+  TestimonialItem,
 } from "@/types/landing";
 
 // shortcut: destinos externos genéricos, trocar quando o plugin e as redes existirem.
@@ -95,6 +96,21 @@ export const SOCIAL_PROOF_AVATARS: SocialProofAvatar[] = [1, 2, 3, 4].map(
     alt: "",
   }),
 );
+
+// Trava de publicação: `npm run verify:release` falha enquanto isto for false.
+export const TESTIMONIALS_VERIFIED = false;
+export const TESTIMONIAL_PROVISIONAL_LABEL = "Conteúdo provisório";
+
+// shortcut: texto reservado, trocar pelos depoimentos reais enviados pelo João Gabriel.
+export const TESTIMONIAL_ITEMS: readonly TestimonialItem[] =
+  SOCIAL_PROOF_AVATARS.map((avatar, index) => ({
+    id: `testimonial-0${index + 1}`,
+    authorName: `Designer de Produto #${index + 1}`,
+    authorRole: "UI/UX Designer",
+    quote: "Espaço reservado para um depoimento real da comunidade Border-IA.",
+    avatar,
+    isPlaceholder: true,
+  }));
 
 export const COPY_CONTRACT: CopyContract = {
   hero: {

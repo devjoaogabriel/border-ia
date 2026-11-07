@@ -1,5 +1,9 @@
 @import "tailwindcss";
 @import "lenis/dist/lenis.css";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
 
 @theme {
   --font-sans: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
@@ -143,5 +147,237 @@ body {
     .container-page {
       padding-inline: 0;
     }
+  }
+}
+
+/* Tokens semânticos do shadcn apontando para a paleta do projeto. */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+}
+
+:root {
+  --background: var(--color-gray-11);
+  --foreground: var(--color-gray-01);
+  --card: var(--color-gray-10);
+  --card-foreground: var(--color-gray-01);
+  --popover: var(--color-gray-10);
+  --popover-foreground: var(--color-gray-01);
+  --primary: var(--color-purple-05);
+  --primary-foreground: var(--color-gray-11);
+  --secondary: var(--color-gray-09);
+  --secondary-foreground: var(--color-gray-01);
+  --muted: var(--color-gray-09);
+  --muted-foreground: var(--color-gray-04);
+  --accent: var(--color-indigo-06);
+  --accent-foreground: var(--color-gray-01);
+  --destructive: var(--color-purple-07);
+  --border: var(--color-gray-08);
+  --input: var(--color-gray-08);
+  --ring: var(--color-purple-05);
+}
+
+/* Guardas do MotionSafeWrapper para animações CSS de componentes externos. */
+[data-motion-state="paused"] *,
+[data-motion-state="paused"] *::before,
+[data-motion-state="paused"] *::after {
+  animation-play-state: paused !important;
+}
+
+[data-motion-state="reduced"] *,
+[data-motion-state="reduced"] *::before,
+[data-motion-state="reduced"] *::after {
+  animation: none !important;
+  transition: none !important;
+}
+
+@property --shiny-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes shiny-spin {
+  to {
+    --shiny-angle: 360deg;
+  }
+}
+
+@keyframes marquee-slide {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes beam-drift {
+  from {
+    translate: -60px 0;
+    opacity: 0.7;
+  }
+  to {
+    translate: 90px 0;
+    opacity: 1;
+  }
+}
+
+@layer components {
+  .border-ring-mask {
+    position: absolute;
+    pointer-events: none;
+    mask:
+      linear-gradient(#000 0 0) content-box exclude,
+      linear-gradient(#000 0 0);
+  }
+
+  .glow-border {
+    inset: -12px;
+    padding: 1px;
+    border-radius: 12px;
+    opacity: 0;
+    background: radial-gradient(
+      280px circle at var(--glow-x, 50%) var(--glow-y, 50%),
+      var(--color-purple-05),
+      var(--color-indigo-06) 45%,
+      transparent 72%
+    );
+    transition: opacity 0.3s;
+  }
+
+  .card-ring {
+    inset: 0;
+    padding: 1.5px;
+    border-radius: 11px;
+    opacity: 0;
+    background: conic-gradient(
+      from var(--ring-angle, 0deg),
+      transparent 0 72%,
+      var(--color-indigo-06) 84%,
+      var(--color-purple-05) 94%,
+      #fff 100%
+    );
+  }
+
+  .shiny-ring {
+    inset: 0;
+    padding: 1.5px;
+    border-radius: inherit;
+    opacity: 0;
+    background: conic-gradient(
+      from var(--shiny-angle),
+      transparent 0 60%,
+      var(--color-purple-02) 82%,
+      #fff 92%,
+      transparent 100%
+    );
+  }
+
+  .dot-wave-mask {
+    mask: url("/icons/dot-matrix.webp") center / 100% 100% no-repeat;
+  }
+
+  .dot-wave {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    opacity: 0;
+    background: radial-gradient(
+      closest-side,
+      transparent 52%,
+      var(--color-purple-05) 76%,
+      var(--color-indigo-05) 88%,
+      transparent 100%
+    );
+  }
+
+  .marquee-track {
+    display: flex;
+    width: max-content;
+  }
+
+  .marquee-group {
+    display: flex;
+    gap: 16px;
+    padding-right: 16px;
+  }
+
+  .footer-beam {
+    position: absolute;
+    top: -45%;
+    left: 34%;
+    width: 240px;
+    height: 200%;
+    rotate: 24deg;
+    filter: blur(44px);
+    background: linear-gradient(
+      180deg,
+      transparent,
+      rgb(167 81 251 / 0.42) 35%,
+      rgb(121 103 255 / 0.2) 70%,
+      transparent
+    );
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .shiny-ring {
+      opacity: 1;
+      animation: shiny-spin 3.2s linear infinite;
+    }
+
+    .marquee-track {
+      animation: marquee-slide 48s linear infinite;
+    }
+
+    .marquee:hover .marquee-track {
+      animation-play-state: paused;
+    }
+
+    .footer-beam {
+      animation: beam-drift 14s ease-in-out infinite alternate;
+    }
+  }
+
+  /* Sem movimento, a faixa vira uma grade estática com os cards originais. */
+  @media (prefers-reduced-motion: reduce) {
+    .marquee-track {
+      width: auto;
+    }
+
+    .marquee-group {
+      flex-wrap: wrap;
+      justify-content: center;
+      padding-right: 0;
+    }
+
+    .marquee-group[aria-hidden] {
+      display: none;
+    }
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
   }
 }

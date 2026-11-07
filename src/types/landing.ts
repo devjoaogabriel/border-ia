@@ -1,3 +1,5 @@
+import type { ReactNode } from "react";
+
 export interface SiteLink {
   id: string;
   label: string;
@@ -47,6 +49,28 @@ export interface CopyContract {
   };
   banner: { socialProof: string; headingLine1: string; headingLine2: string };
   footer: { creditLabel: string; creditAuthor: string };
+}
+
+export interface TestimonialItem {
+  id: string;
+  authorName: string;
+  authorRole: string;
+  quote: string;
+  avatar: SocialProofAvatar;
+  isPlaceholder: boolean;
+}
+
+export interface MotionSafeContext {
+  prefersReducedMotion: boolean;
+  canHover: boolean;
+  isInView: boolean;
+}
+
+export interface MotionSafeWrapperProps {
+  children: ReactNode | ((context: MotionSafeContext) => ReactNode);
+  className?: string;
+  staticFallbackClassName?: string;
+  observeVisibility?: boolean;
 }
 
 export interface MotionEnvironment {

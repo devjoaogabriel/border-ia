@@ -6,7 +6,7 @@ export function BorderIaLogo({ className = "" }: { className?: string }) {
     <a
       href="#hero"
       aria-label="Border-IA, voltar ao início"
-      className={`inline-block shrink-0 transition-transform duration-300 hover:scale-[1.03] ${className}`}
+      className={`inline-block shrink-0 motion-safe:transition-transform motion-safe:duration-300 motion-safe:hover:scale-[1.03] ${className}`}
     >
       <Image
         src="/icons/logo-full.svg"

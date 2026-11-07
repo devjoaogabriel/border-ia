@@ -2,21 +2,35 @@ import Image from "next/image";
 
 interface DotMatrixDecorProps {
   variant: "asset" | "css";
+  animatedWave?: boolean;
   className?: string;
 }
 
-export function DotMatrixDecor({ variant, className = "" }: DotMatrixDecorProps) {
+export function DotMatrixDecor({
+  variant,
+  animatedWave = false,
+  className = "",
+}: DotMatrixDecorProps) {
   if (variant === "asset") {
     return (
-      <Image
-        src="/icons/dot-matrix.svg"
-        alt=""
+      <div
         aria-hidden="true"
-        width={200}
-        height={200}
-        loading="lazy"
-        className={`pointer-events-none absolute ${className}`}
-      />
+        className={`pointer-events-none absolute size-[200px] ${className}`}
+      >
+        <Image
+          src="/icons/dot-matrix.webp"
+          alt=""
+          width={200}
+          height={200}
+          loading="lazy"
+        />
+        {animatedWave && (
+          <div className="dot-wave-mask absolute inset-0 overflow-hidden">
+            {/* O GSAP move a onda só com movimento permitido e a seção visível. */}
+            <span data-wave className="dot-wave" />
+          </div>
+        )}
+      </div>
     );
   }
   return (

@@ -60,27 +60,50 @@ export function LandingMotionController({ children }: { children: ReactNode }) {
           scrollTrigger: { trigger: "#recursos", start: "top 55%", once: true },
         });
 
-        gsap.from("[data-m='banner']", {
+        // CM-10: 0.25s de entrada e 0.1s entre etapas fecham os 0.65s da spec.
+        const bannerReveal = { autoAlpha: 0, y: 16, duration: 0.25 };
+        gsap
+          .timeline({
+            defaults: { ease: "power3.out" },
+            scrollTrigger: {
+              trigger: "#depoimentos",
+              start: "top 80%",
+              once: true,
+            },
+          })
+          .from("[data-m='banner']", { ...bannerReveal, y: 40 }, 0)
+          .from("[data-m='banner-avatars']", bannerReveal, 0.1)
+          .from("[data-m='banner-proof']", bannerReveal, 0.2)
+          .from("[data-m='banner-heading']", bannerReveal, 0.3)
+          .from("[data-m='banner-cta']", bannerReveal, 0.4);
+
+        gsap.from("[data-m='banner-marquee']", {
           ...REVEAL,
-          y: 40,
           scrollTrigger: {
-            trigger: "#depoimentos",
-            start: "top 80%",
+            trigger: "[data-m='banner-marquee']",
+            start: "top 92%",
             once: true,
           },
         });
-        gsap.from("[data-m='banner'] img[aria-hidden]", {
-          autoAlpha: 0,
-          scale: 0.9,
-          duration: 1.2,
-          stagger: 0.2,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: "#depoimentos",
-            start: "top 70%",
-            once: true,
+
+        gsap.fromTo(
+          "[data-wave]",
+          { scale: 0.1, opacity: 0.95 },
+          {
+            scale: 1.5,
+            opacity: 0,
+            duration: 2.4,
+            ease: "sine.out",
+            repeat: -1,
+            stagger: 0.5,
+            scrollTrigger: {
+              trigger: "#depoimentos",
+              start: "top bottom",
+              end: "bottom top",
+              toggleActions: "play pause resume pause",
+            },
           },
-        });
+        );
 
         gsap.from("[data-m='footer']", {
           ...REVEAL,
