@@ -13,7 +13,7 @@ export function BorderIaLogo({ className = "" }: { className?: string }) {
         alt=""
         width={192}
         height={40}
-        className="h-auto w-[186px] lg:w-[192px]"
+        className="h-auto w-[149px] lg:w-[154px]"
       />
     </a>
   );

@@ -1,15 +1,10 @@
 <!--
 Sync Impact Report
-- Version change: 0.0.0 (template) -> 1.0.0
-- Modified principles:
-  - [PRINCIPLE_1_NAME] -> I. Fidelidade Visual e Contratual ao Figma (INEGOCIAVEL)
-  - [PRINCIPLE_2_NAME] -> II. Movimento Intencional e Shapes Realistas com Degradacao Graciosa
-  - [PRINCIPLE_3_NAME] -> III. Respeito Integral a prefers-reduced-motion (INEGOCIAVEL)
-  - [PRINCIPLE_4_NAME] -> IV. Performance de Primeiro Paint e Orcamento de Renderizacao (INEGOCIAVEL)
-  - [PRINCIPLE_5_NAME] -> V. Acessibilidade Semantica e Navegabilidade (INEGOCIAVEL)
-- Added sections:
-  - Restricoes de Stack e Conteudo
-  - Fluxo de Trabalho e Portoes de Qualidade
+- Version change: 1.0.0 -> 1.1.0
+- Modified principles: None (Principios I a V mantidos intactos, incluindo fidelidade estrita ao Figma no Principio I e prefers-reduced-motion no Principio III)
+- Modified sections:
+  - Restricoes de Stack e Conteudo (excecao minima e estritamente escopada autorizando framer-motion, clsx e tailwind-merge exclusivamente para o brilho animado aprovado no H1 em src/components/ui/animated-shiny-text.tsx, sem liberar shadcn/ui, 21st.dev ou desvios gerais do Figma)
+- Added sections: None
 - Removed sections: None
 - Templates requiring updates:
   - .specify/templates/plan-template.md (verificado, compativel via Constitution Check)
@@ -27,7 +22,7 @@ Os frames aprovados no Figma para Desktop (`307:78`, 1440px), Mobile (`335:10650
 
 ### II. Movimento Intencional e Shapes Realistas com Degradacao Graciosa
 
-A coreografia da página DEVE dar vida aos elementos gráficos do layout sem distorcer proporções, alinhamentos ou legibilidade aprovados no Figma. Sequenciamento de entrada, animações vinculadas ao scroll e traçado de linhas vetoriais DEVEM utilizar GSAP com `@gsap/react` (`useGSAP` escopado e reversão automática em desmontagem), coordenados com scroll suave via Lenis. Elementos tridimensionais ou shaders (`Three.js` com `@react-three/fiber`) DEVEM ser aplicados estritamente onde volume físico, chanfro especular ou luz volumétrica elevarem o realismo visual (como o feixe energético do Hero e o emblema de prismas em losango), mantendo fallback estático imediato em SVG/CSS idêntico ao layout para o primeiro paint e para dispositivos sem WebGL.
+A coreografia da página DEVE dar vida aos elementos gráficos do layout sem distorcer proporções, alinhamentos ou legibilidade aprovados no Figma. Sequenciamento de entrada, animações vinculadas ao scroll, interações físicas/inerciais e traçado de linhas vetoriais DEVEM utilizar GSAP com `@gsap/react` (`useGSAP` escopado e reversão automática em desmontagem), coordenados com scroll suave via Lenis. Elementos tridimensionais ou shaders (`Three.js` com `@react-three/fiber`) DEVEM ser aplicados estritamente onde volume físico, chanfro especular ou luz volumétrica elevarem o realismo visual (como o feixe energético do Hero e o emblema de prismas em losango), mantendo fallback estático imediato em SVG/CSS idêntico ao layout para o primeiro paint e para dispositivos sem WebGL.
 
 ### III. Respeito Integral a prefers-reduced-motion (INEGOCIAVEL)
 
@@ -43,7 +38,7 @@ A página DEVE declarar `lang="pt-BR"`, estruturar marcos semânticos claros (`h
 
 ## Restricoes de Stack e Conteudo
 
-A stack técnica é fixa e inegociável conforme `AGENTS.md`: Next.js (App Router), React, TypeScript e Tailwind CSS gerenciados via `npm`, GSAP com `@gsap/react` para movimento, Lenis para scroll suave e Three.js com `@react-three/fiber` para shapes realistas. Nenhuma biblioteca da stack pode ser substituída ou duplicada por equivalentes concorrentes (como Framer Motion ou bibliotecas externas de UI não previstas). A tipografia única do projeto DEVE ser `Space Grotesk` carregada via `next/font/google`, e a paleta de cores DEVE seguir estritamente as escalas `Gray`, `Purple` e `Indigo` sobre o fundo `Gray-11` (`#09090B`). Em toda documentação, especificação, comentário e código do projeto, o idioma padrão é PT-BR e o caractere travessão (`U+2014`) é estritamente proibido.
+A stack técnica é fixa conforme `AGENTS.md`: Next.js (App Router), React, TypeScript e Tailwind CSS gerenciados via `npm`, GSAP com `@gsap/react` para movimento, Lenis para scroll suave e Three.js com `@react-three/fiber` para shapes realistas. Nenhuma biblioteca da stack pode ser substituída ou duplicada por equivalentes concorrentes ou bibliotecas externas de UI não previstas (como `shadcn/ui` ou catálogos externos), com uma única exceção pontual aprovada pelo João Gabriel: o pacote `framer-motion` (acompanhado dos utilitários `clsx` e `tailwind-merge` em `src/lib/utils.ts`) é permitido exclusivamente para sustentar o brilho animado aprovado no título principal `H1` (`src/components/ui/animated-shiny-text.tsx`), sujeito integralmente ao Princípio III (`prefers-reduced-motion`) e vedado em qualquer outro componente do projeto. A tipografia única do projeto DEVE ser `Space Grotesk` carregada via `next/font/google`, e a paleta de cores DEVE seguir estritamente as escalas `Gray`, `Purple` e `Indigo` sobre o fundo `Gray-11` (`#09090B`). Em toda documentação, especificação, comentário e código do projeto, o idioma padrão é PT-BR e o caractere travessão (`U+2014`) é estritamente proibido.
 
 ## Fluxo de Trabalho e Portoes de Qualidade
 
@@ -53,4 +48,4 @@ O ciclo de execução segue três etapas: especificação completa em Spec-Kit p
 
 Esta Constituição prevalece sobre convenções implícitas e orienta obrigatoriamente os artefatos de especificação (`spec.md`), arquitetura (`plan.md`), tarefas (`tasks.md`) e implementação. Qualquer alteração nestes princípios exige documentação explícita da motivação, atualização do relatório de impacto no topo deste arquivo e incremento de versão segundo Versionamento Semântico: `MAJOR` para remoção ou redefinição incompatível de princípio inegociável, `MINOR` para adição de novo princípio ou expansão material de governança e `PATCH` para ajustes redacionais sem mudança de regra. Toda revisão técnica e execução de `speckit-analyze` DEVE auditar conformidade direta com os cinco princípios centrais antes de liberar ou concluir a implementação.
 
-**Version**: 1.0.0 | **Ratified**: 2026-11-06 | **Last Amended**: 2026-11-06
+**Version**: 1.1.0 | **Ratified**: 2026-11-06 | **Last Amended**: 2026-11-06

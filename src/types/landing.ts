@@ -49,6 +49,20 @@ export interface CopyContract {
   footer: { creditLabel: string; creditAuthor: string };
 }
 
+export type CardTiltInteractionState = "balancing" | "dragging" | "rebounding";
+
+export interface CardTiltPhysicsConfig {
+  balanceSegmentSec: number;
+  balanceKeyframes: readonly { rotationX: number; rotationY: number; rotation: number }[];
+  dragMinMovementPx: number;
+  dragMaxRotateX: number;
+  dragMaxRotateY: number;
+  dragPressScale: number;
+  dragFollowSec: number;
+  reboundSec: number;
+  reboundEase: string;
+}
+
 export interface MotionEnvironment {
   reduceMotion: boolean;
   canHover: boolean;
