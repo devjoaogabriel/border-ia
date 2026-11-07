@@ -95,3 +95,13 @@ export function advanceCursorMeshState(state: CursorMeshRuntimeState, rawDtSec: 
   }
   return false;
 }
+
+/** Mouse e caneta ganham o cursor de pontos; toque mantém o comportamento nativo. */
+export function isValidCursorPointerType(pointerType: string | null | undefined): boolean {
+  return pointerType === "mouse" || pointerType === "pen";
+}
+
+/** O ponto do clique não depende do dither Bayer: fica aceso, com piso de 0.7, enquanto há presença. */
+export function computeCentralDotAlpha(presence: number): number {
+  return presence > 0 ? Math.min(1, Math.max(0.7, presence)) : 0;
+}

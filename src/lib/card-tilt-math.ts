@@ -35,3 +35,19 @@ export function computeCardHoverAngles(
     rotationX: -Math.tanh(normY * TANH_GAIN) * config.hoverMaxRotateX * gain,
   };
 }
+
+export interface CardMotionPolicyInput {
+  inViewport: boolean;
+  isDesktop: boolean;
+  reduceMotion: boolean;
+}
+
+/** Giro do arco e pulso de luz: só com o card na tela e movimento liberado. */
+export function shouldRunCardContinuousMotion({ inViewport, reduceMotion }: CardMotionPolicyInput): boolean {
+  return inViewport && !reduceMotion;
+}
+
+/** Ponte de ângulos com a corda: a corda só existe no Desktop. */
+export function shouldSyncHeroTicker(input: CardMotionPolicyInput): boolean {
+  return shouldRunCardContinuousMotion(input) && input.isDesktop;
+}

@@ -44,7 +44,7 @@ export function FeaturesSection() {
                   height={item.iconSize}
                 />
               </div>
-              <h3 className="text-[24px] leading-[1.3] font-medium tracking-[0.01em] text-gray-02 lg:whitespace-nowrap">
+              <h3 className="text-[24px] leading-[1.3] font-medium tracking-[0.01em] text-gray-02 xl:whitespace-nowrap">
                 {item.title}
               </h3>
               <p className="text-[16px] leading-[1.5] tracking-[0.01em] text-gray-05">

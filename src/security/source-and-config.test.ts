@@ -45,3 +45,29 @@ describe("configuração", () => {
     expect(readFileSync(join(ROOT, "next.config.ts"), "utf8")).not.toMatch(/dangerouslyAllowSVG\s*:\s*true/);
   });
 });
+
+describe("CSS e layout (CR-04 e CR-11)", () => {
+  const css = readFileSync(join(ROOT, "src/app/globals.css"), "utf8");
+
+  it("o Tailwind só procura classes dentro de src", () => {
+    expect(css).toMatch(/@import "tailwindcss" source\("\.\."\);/);
+  });
+
+  it("nenhum comentário do CSS tem classe arbitrária entre colchetes", () => {
+    const comments = css.match(/\/\*[\s\S]*?\*\//g) ?? [];
+    expect(comments.filter((c) => /\[[^\]]*:[^\]]*\]/.test(c))).toEqual([]);
+  });
+
+  it("a transição da btn-shine não é anulada por utilitário", () => {
+    expect(css).toMatch(/\.btn-shine\s*\{[^}]*transition-duration:\s*300ms/);
+    const buttons = ["src/components/ui/CtaButton.tsx", "src/components/ui/MagicCopyCard.tsx"].map((f) =>
+      readFileSync(join(ROOT, f), "utf8"),
+    );
+    for (const b of buttons) expect(b).not.toMatch(/btn-shine[^"`]*\btransition\b/);
+  });
+
+  it("o título dos recursos pode quebrar linha entre 1024 e 1279px", () => {
+    const features = readFileSync(join(ROOT, "src/components/sections/FeaturesSection.tsx"), "utf8");
+    expect(features).not.toMatch(/\blg:whitespace-nowrap\b/);
+  });
+});

@@ -22,7 +22,7 @@ export function CtaButton({ link, variant, icon, className = "" }: CtaButtonProp
   return (
     <a
       {...resolveSiteLinkAttributes(link)}
-      className={`btn-shine inline-flex shrink-0 items-center justify-center rounded text-[14px] leading-[1.3] font-medium tracking-[0.01em] whitespace-nowrap uppercase transition duration-300 ${VARIANTS[variant]} ${className}`}
+      className={`btn-shine inline-flex shrink-0 items-center justify-center rounded text-[14px] leading-[1.3] font-medium tracking-[0.01em] whitespace-nowrap uppercase ${VARIANTS[variant]} ${className}`}
     >
       {icon && <MaskIcon src={icon} />}
       {link.label}

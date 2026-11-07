@@ -38,6 +38,12 @@ export function HeroBeamLazy() {
   const isDesktop = useMediaQuery("(min-width: 1024px)");
   const connected = isDesktop && !reduceMotion;
   const [canvasReady, setCanvasReady] = useState(false);
+  // Ao sair do Desktop, "pronto" zera durante o render: o próximo canvas precisa avisar de novo.
+  const [wasConnected, setWasConnected] = useState(connected);
+  if (connected !== wasConnected) {
+    setWasConnected(connected);
+    if (!connected) setCanvasReady(false);
+  }
 
   useEffect(() => {
     const path = pathRef.current;
@@ -111,13 +117,14 @@ export function HeroBeamLazy() {
           className="absolute top-0"
           style={{ left: BEAM_CENTER - CANVAS_WIDTH / 2, width: CANVAS_WIDTH, height: BEAM_HEIGHT }}
         >
-          <WebGLSafeBoundary>
+          <WebGLSafeBoundary onError={() => setCanvasReady(false)}>
             <HeroBeamCanvas
               isActive={inViewport}
               width={CANVAS_WIDTH}
               height={BEAM_HEIGHT}
               meshHalfWidth={MESH_HALF_WIDTH}
               onReady={() => setCanvasReady(true)}
+              onLost={() => setCanvasReady(false)}
             />
           </WebGLSafeBoundary>
         </div>

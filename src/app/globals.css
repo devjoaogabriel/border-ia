@@ -1,4 +1,5 @@
-@import "tailwindcss";
+/* Só src gera classes: docs e specs citam classes que não existem no site. */
+@import "tailwindcss" source("..");
 @import "lenis/dist/lenis.css";
 
 @theme {
@@ -194,14 +195,17 @@ body {
   inherits: false;
 }
 
-/* Em components: o [--shine:...] de cada variante (utilities) vence o padrão. */
+/* Em components: o --shine de cada variante, um utilitário, vence o padrão. */
 @layer components {
   .btn-shine {
     --shine: #fff;
     position: relative;
     isolation: isolate;
     overflow: hidden;
+    /* A transição é toda da classe: os botões com btn-shine não usam o utilitário transition. */
     transition-property: color, background-color, border-color, filter, box-shadow, translate, scale;
+    transition-duration: 300ms;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .btn-shine::before,

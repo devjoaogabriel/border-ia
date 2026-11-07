@@ -94,11 +94,14 @@ function Prisms({ burstSignal, canHover }: PrismsProps) {
 interface PluginPrismLogo3DProps extends PrismsProps {
   isActive: boolean;
   onReady: () => void;
+  /** GPU descartou o contexto: o pai volta a mostrar o logo em SVG. */
+  onLost?: () => void;
 }
 
 export default function PluginPrismLogo3D({
   isActive,
   onReady,
+  onLost,
   ...prisms
 }: PluginPrismLogo3DProps) {
   return (
@@ -110,7 +113,17 @@ export default function PluginPrismLogo3D({
       frameloop={isActive ? "always" : "never"}
       camera={{ position: [0, 0, 100], zoom: 1 }}
       gl={{ alpha: true, antialias: true }}
-      onCreated={onReady}
+      onCreated={({ gl }) => {
+        gl.domElement.addEventListener(
+          "webglcontextlost",
+          (event) => {
+            event.preventDefault();
+            onLost?.();
+          },
+          { once: true },
+        );
+        onReady();
+      }}
       style={{ position: "absolute", inset: 0, pointerEvents: "none" }}
     >
       <ambientLight intensity={1.5} />

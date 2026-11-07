@@ -3,7 +3,9 @@ import {
   advanceCursorMeshState,
   approach,
   createInitialCursorState,
+  computeCentralDotAlpha,
   computeCursorCellAlpha,
+  isValidCursorPointerType,
   CURSOR_MESH_CONSTANTS as C,
 } from "@/lib/cursor-mesh-math";
 
@@ -99,5 +101,25 @@ describe("amortecimento e hibernação do cursor", () => {
     Object.assign(state, { targetPresence: 1 });
     for (let i = 0; i < 300; i++) expect(advanceCursorMeshState(state, 1 / 60)).toBe(false);
     expect(state.presence).toBeGreaterThan(0.99);
+  });
+});
+
+describe("cursor com caneta e ponto de clique (CR-01)", () => {
+  it.each([
+    ["mouse", true],
+    ["pen", true],
+    ["touch", false],
+    ["", false],
+    [null, false],
+    [undefined, false],
+  ])("ponteiro %s vale %s", (type, expected) => {
+    expect(isValidCursorPointerType(type)).toBe(expected);
+  });
+
+  it("o ponto central nunca some enquanto o cursor existe", () => {
+    expect(computeCentralDotAlpha(0)).toBe(0);
+    expect(computeCentralDotAlpha(0.05)).toBe(0.7);
+    expect(computeCentralDotAlpha(0.9)).toBe(0.9);
+    expect(computeCentralDotAlpha(1)).toBe(1);
   });
 });

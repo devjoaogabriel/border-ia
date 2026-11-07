@@ -20,14 +20,21 @@ function hasWebGL(): boolean {
   return webglSupport;
 }
 
-class CanvasErrorBoundary extends Component<
-  { children: ReactNode },
-  { failed: boolean }
-> {
+interface BoundaryProps {
+  children: ReactNode;
+  /** Avisa o pai para devolver o fallback quando o canvas quebra depois de pronto. */
+  onError?: () => void;
+}
+
+class CanvasErrorBoundary extends Component<BoundaryProps, { failed: boolean }> {
   state = { failed: false };
 
   static getDerivedStateFromError() {
     return { failed: true };
+  }
+
+  componentDidCatch() {
+    this.props.onError?.();
   }
 
   render() {
@@ -36,8 +43,8 @@ class CanvasErrorBoundary extends Component<
 }
 
 // Sem WebGL ou com erro no canvas, nada é renderizado e o fallback estático continua visível.
-export function WebGLSafeBoundary({ children }: { children: ReactNode }) {
+export function WebGLSafeBoundary({ children, onError }: BoundaryProps) {
   const supported = useSyncExternalStore(subscribe, hasWebGL, () => false);
   if (!supported) return null;
-  return <CanvasErrorBoundary>{children}</CanvasErrorBoundary>;
+  return <CanvasErrorBoundary onError={onError}>{children}</CanvasErrorBoundary>;
 }

@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { CARD_TILT_CONFIG as T, computeCardHoverAngles } from "@/lib/card-tilt-math";
+import {
+  CARD_TILT_CONFIG as T,
+  computeCardHoverAngles,
+  shouldRunCardContinuousMotion,
+  shouldSyncHeroTicker,
+} from "@/lib/card-tilt-math";
 
 describe("inclinação do card no hover", () => {
   it("fica reto com o mouse no centro", () => {
@@ -34,5 +39,21 @@ describe("inclinação do card no hover", () => {
     expect(T.hoverCtaDamping).toBe(0.35);
     expect(cta.rotationY).toBeCloseTo(free.rotationY * 0.35, 9);
     expect(cta.rotationX).toBeCloseTo(free.rotationX * 0.35, 9);
+  });
+});
+
+describe("quando o card anima (CR-05)", () => {
+  const all = [true, false].flatMap((inViewport) =>
+    [true, false].flatMap((isDesktop) =>
+      [true, false].map((reduceMotion) => ({ inViewport, isDesktop, reduceMotion })),
+    ),
+  );
+
+  it.each(all)("giro e pulso: %o", (input) => {
+    expect(shouldRunCardContinuousMotion(input)).toBe(input.inViewport && !input.reduceMotion);
+  });
+
+  it.each(all)("ponte com a corda no ticker: %o", (input) => {
+    expect(shouldSyncHeroTicker(input)).toBe(input.inViewport && input.isDesktop && !input.reduceMotion);
   });
 });

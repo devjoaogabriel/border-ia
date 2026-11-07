@@ -10,7 +10,12 @@ import {
   ScrollTrigger,
   useGSAP,
 } from "@/lib/gsap";
-import { CARD_TILT_CONFIG, computeCardHoverAngles } from "@/lib/card-tilt-math";
+import {
+  CARD_TILT_CONFIG,
+  computeCardHoverAngles,
+  shouldRunCardContinuousMotion,
+  shouldSyncHeroTicker,
+} from "@/lib/card-tilt-math";
 import type { CardTiltInteractionState } from "@/types/landing";
 import { MaskIcon } from "./MaskIcon";
 
@@ -34,18 +39,20 @@ export function MagicCopyCard({ className = "" }: { className?: string }) {
           canAnimate: "(prefers-reduced-motion: no-preference)",
           canHover:
             "(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)",
+          isDesktop: "(min-width: 1024px)",
         },
         (context) => {
         if (!context.conditions?.canAnimate) return;
-        spinRef.current = gsap.to("[data-card-arc]", {
+        const spin = gsap.to("[data-card-arc]", {
           rotation: 360,
           transformOrigin: "50% 50%",
           duration: 1.4,
           ease: "none",
           repeat: -1,
         });
+        spinRef.current = spin;
         // O pulso desce pelo feixe e acende a borda do card ao chegar.
-        gsap
+        const pulse = gsap
           .timeline({ repeat: -1, repeatDelay: 3, delay: 0.9 })
           .fromTo(
             beamPulse,
@@ -70,16 +77,6 @@ export function MagicCopyCard({ className = "" }: { className?: string }) {
         });
         TILT.balanceKeyframes.forEach((keyframe) => balance.to(card, keyframe));
 
-        const visibility = ScrollTrigger.create({
-          trigger: rootRef.current,
-          start: "top bottom",
-          end: "bottom top",
-          onToggle: ({ isActive }) => {
-            inViewport = isActive;
-            if (state === "balancing") balance.paused(!isActive);
-          },
-        });
-
         // O feixe lê estes ângulos para manter a ponta presa ao card.
         const read = gsap.getProperty(card);
         const syncMotion = () => {
@@ -87,7 +84,33 @@ export function MagicCopyCard({ className = "" }: { className?: string }) {
           heroCardMotion.rotationY = read("rotationY") as number;
           heroCardMotion.rotation = read("rotation") as number;
         };
-        gsap.ticker.add(syncMotion);
+        let syncing = false;
+
+        // Fora da tela tudo para: balance, giro, pulso e a ponte com a corda.
+        const applyVisibility = (isActive: boolean) => {
+          inViewport = isActive;
+          if (state === "balancing") balance.paused(!isActive);
+          const policy = {
+            inViewport: isActive,
+            isDesktop: Boolean(context.conditions?.isDesktop),
+            reduceMotion: false,
+          };
+          const run = shouldRunCardContinuousMotion(policy);
+          spin.paused(!run);
+          pulse.paused(!run);
+          const sync = shouldSyncHeroTicker(policy);
+          if (sync && !syncing) gsap.ticker.add(syncMotion);
+          if (!sync && syncing) gsap.ticker.remove(syncMotion);
+          syncing = sync;
+        };
+
+        const visibility = ScrollTrigger.create({
+          trigger: rootRef.current,
+          start: "top bottom",
+          end: "bottom top",
+          onToggle: ({ isActive }) => applyVisibility(isActive),
+        });
+        applyVisibility(visibility.isActive);
 
         let stopHover = () => {};
         if (context.conditions?.canHover) {
@@ -268,7 +291,7 @@ export function MagicCopyCard({ className = "" }: { className?: string }) {
           <button
             ref={buttonRef}
             type="button"
-            className="btn-shine mt-[27px] flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded text-[16px] font-medium tracking-[0.01em] text-white transition duration-300 [background-image:var(--gradient-linear-degrade)] hover:brightness-110"
+            className="btn-shine mt-[27px] flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded text-[16px] font-medium tracking-[0.01em] text-white [background-image:var(--gradient-linear-degrade)] hover:brightness-110"
           >
             <MaskIcon src="/icons/feature-bg-remover.svg" />
             {pluginCard.cta}

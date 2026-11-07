@@ -146,6 +146,8 @@ interface HeroBeamCanvasProps {
   height: number;
   meshHalfWidth: number;
   onReady?: () => void;
+  /** GPU descartou o contexto: o pai volta a mostrar os pontos em CSS. */
+  onLost?: () => void;
 }
 
 export default function HeroBeamCanvas({
@@ -154,6 +156,7 @@ export default function HeroBeamCanvas({
   height,
   meshHalfWidth,
   onReady,
+  onLost,
 }: HeroBeamCanvasProps) {
   return (
     <Canvas
@@ -162,7 +165,17 @@ export default function HeroBeamCanvas({
       dpr={[1, 2]}
       frameloop={isActive ? "always" : "never"}
       gl={{ alpha: true, antialias: false }}
-      onCreated={onReady}
+      onCreated={({ gl }) => {
+        gl.domElement.addEventListener(
+          "webglcontextlost",
+          (event) => {
+            event.preventDefault();
+            onLost?.();
+          },
+          { once: true },
+        );
+        onReady?.();
+      }}
       style={{ position: "absolute", inset: 0, pointerEvents: "none" }}
     >
       <BeamPlane width={width} height={height} meshHalfWidth={meshHalfWidth} />

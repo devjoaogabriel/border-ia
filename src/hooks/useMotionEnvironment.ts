@@ -2,17 +2,13 @@
 
 import { type RefObject, useEffect, useState, useSyncExternalStore } from "react";
 import type { MotionEnvironment } from "@/types/landing";
+import { getMediaQueryStore } from "./media-query-store";
+
+const serverSnapshot = () => false;
 
 export function useMediaQuery(query: string): boolean {
-  return useSyncExternalStore(
-    (notify) => {
-      const media = window.matchMedia(query);
-      media.addEventListener("change", notify);
-      return () => media.removeEventListener("change", notify);
-    },
-    () => window.matchMedia(query).matches,
-    () => false,
-  );
+  const { subscribe, getSnapshot } = getMediaQueryStore(query);
+  return useSyncExternalStore(subscribe, getSnapshot, serverSnapshot);
 }
 
 export function useMotionEnvironment(): MotionEnvironment {
