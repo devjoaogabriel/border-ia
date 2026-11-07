@@ -206,7 +206,7 @@ export function MagicCopyCard({ className = "" }: { className?: string }) {
         ref={cardRef}
         role="group"
         aria-label="Demonstração do plugin Magic copy"
-        className="relative h-[405px] w-[324px] touch-pan-y overflow-hidden rounded-xl border border-[#9C7BFF] bg-gray-11 p-10 will-change-transform"
+        className="relative h-[405px] w-[324px] touch-pan-y overflow-hidden rounded-[10px] border border-transparent p-10 will-change-transform [background:linear-gradient(var(--color-gray-11),var(--color-gray-11))_padding-box,var(--gradient-linear-degrade)_border-box]"
       >
         <div
           aria-hidden="true"
@@ -215,12 +215,12 @@ export function MagicCopyCard({ className = "" }: { className?: string }) {
         <div
           data-card-glow
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 rounded-xl opacity-0 shadow-[inset_0_0_26px_rgb(192_130_255/0.65)]"
+          className="pointer-events-none absolute inset-0 rounded-[9px] opacity-0 shadow-[inset_0_0_26px_rgb(192_130_255/0.65)]"
         />
         <div
           data-card-burst
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 rounded-xl opacity-0 shadow-[inset_0_0_44px_rgb(167_81_251/0.9)]"
+          className="pointer-events-none absolute inset-0 rounded-[9px] opacity-0 shadow-[inset_0_0_44px_rgb(167_81_251/0.9)]"
         />
 
         <div className="relative">
