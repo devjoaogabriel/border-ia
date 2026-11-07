@@ -1,26 +1,147 @@
 @import "tailwindcss";
+@import "lenis/dist/lenis.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --font-sans: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+
+  --color-gray-01: #fafafa;
+  --color-gray-02: #f4f4f5;
+  --color-gray-03: #e4e4e7;
+  --color-gray-04: #d4d4d8;
+  --color-gray-05: #a1a1aa;
+  --color-gray-06: #71717a;
+  --color-gray-07: #52525b;
+  --color-gray-08: #3f3f46;
+  --color-gray-09: #27272a;
+  --color-gray-10: #18181b;
+  --color-gray-11: #09090b;
+
+  --color-purple-01: #faf5ff;
+  --color-purple-02: #f3e7ff;
+  --color-purple-03: #e9d4ff;
+  --color-purple-04: #d8b2ff;
+  --color-purple-05: #c082ff;
+  --color-purple-06: #a751fb;
+  --color-purple-07: #922eef;
+  --color-purple-08: #7d1ed2;
+  --color-purple-09: #6a1eab;
+  --color-purple-10: #58198a;
+  --color-purple-11: #3b0566;
+
+  --color-indigo-01: #f3f2ff;
+  --color-indigo-02: #e8e8ff;
+  --color-indigo-03: #d4d5ff;
+  --color-indigo-04: #b4b1ff;
+  --color-indigo-05: #8e85ff;
+  --color-indigo-06: #7a67ff;
+  --color-indigo-07: #5530f7;
+  --color-indigo-08: #481ee3;
+  --color-indigo-09: #3b18bf;
+  --color-indigo-10: #32169c;
+  --color-indigo-11: #1c0b6a;
+
+  /* Linear-degrade, lido do código de referência do Figma (botões e tags). */
+  --gradient-linear-degrade: linear-gradient(90deg, #c082ff 0%, #7967ff 100%);
+  --gradient-banner-heading: linear-gradient(
+    90deg,
+    #fff 6.6%,
+    #c082ff 64.94%,
+    #7967ff 106.28%
+  );
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  background: var(--color-gray-11);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  overflow-x: clip;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-purple-04);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+@layer components {
+  .container-page {
+    width: 100%;
+    max-width: 1223px;
+    margin-inline: auto;
+    padding-inline: 22px;
+  }
+
+  .t-h1,
+  .t-h2,
+  .t-h-banner {
+    font-weight: 500;
+    line-height: 1.3;
+    letter-spacing: 0.01em;
+  }
+
+  .t-h1 {
+    /* Mantém "Acelere sua criação" em uma linha até 320px. */
+    font-size: min(40px, calc((100vw - 44px) / 9.6));
+  }
+
+  .t-h2 {
+    font-size: clamp(26px, 7.67vw, 33px);
+  }
+
+  .t-h-banner {
+    font-size: 32px;
+  }
+
+  .t-tag {
+    font-weight: 500;
+    font-size: 10px;
+    line-height: 1.3;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .t-p {
+    font-size: 14px;
+    line-height: 1.5;
+    letter-spacing: 0.01em;
+  }
+
+  .text-gradient {
+    background-image: var(--gradient-linear-degrade);
+    background-clip: text;
+    color: transparent;
+  }
+
+  @media (min-width: 1024px) {
+    .container-page {
+      padding-inline: 24px;
+    }
+
+    .t-h1 {
+      font-size: 64px;
+    }
+
+    .t-h2 {
+      font-size: 48px;
+    }
+
+    .t-h-banner {
+      font-size: 40px;
+    }
+
+    .t-tag {
+      font-size: 16px;
+    }
+
+    .t-p {
+      font-size: 18px;
+    }
+  }
+
+  @media (min-width: 1272px) {
+    .container-page {
+      padding-inline: 0;
+    }
+  }
 }

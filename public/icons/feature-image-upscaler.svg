@@ -1,0 +1,19 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="ArrowsOut" clip-path="url(#clip0_0_4)">
+<g id="Vector">
+</g>
+<path id="Vector_2" d="M20 6H26V12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="#FAFAFA"/>
+<path id="Vector_3" d="M19 13L26 6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="#FAFAFA"/>
+<path id="Vector_4" d="M12 26H6V20" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="#FAFAFA"/>
+<path id="Vector_5" d="M13 19L6 26" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="#FAFAFA"/>
+<path id="Vector_6" d="M26 20V26H20" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="#A1A1AA"/>
+<path id="Vector_7" d="M19 19L26 26" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="#A1A1AA"/>
+<path id="Vector_8" d="M6 12V6H12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="#A1A1AA"/>
+<path id="Vector_9" d="M13 13L6 6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="#A1A1AA"/>
+</g>
+<defs>
+<clipPath id="clip0_0_4">
+<rect width="32" height="32" fill="white"/>
+</clipPath>
+</defs>
+</svg>
