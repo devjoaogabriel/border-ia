@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { HeroBeamLazy } from "@/components/three/HeroBeamLazy";
+import { AnimatedText } from "@/components/ui/animated-shiny-text";
 import { AnimatedStrokeWord } from "@/components/ui/AnimatedStrokeWord";
 import { CtaButton } from "@/components/ui/CtaButton";
 import { DotMatrixDecor } from "@/components/ui/DotMatrixDecor";
@@ -18,16 +19,19 @@ export function HeroSection() {
       <div className="container-page relative">
         <div className="relative z-10 flex flex-col items-start gap-[15px] lg:w-[621px] lg:gap-6">
           <TagBadge>{hero.tag}</TagBadge>
-          <h1
+          <AnimatedText
             id="hero-heading"
             data-m="hero-text"
-            className="t-h1 max-w-[9.7em] text-white"
-          >
-            {hero.headingPrefix}
-            <AnimatedStrokeWord variant="oval">
-              {hero.headingHighlight}
-            </AnimatedStrokeWord>
-          </h1>
+            textClassName="t-h1 max-w-[9.7em]"
+            text={
+              <>
+                {hero.headingPrefix}
+                <AnimatedStrokeWord variant="oval">
+                  {hero.headingHighlight}
+                </AnimatedStrokeWord>
+              </>
+            }
+          />
           <div className="flex items-center gap-6">
             <p data-m="hero-text" className="t-p text-gray-05 lg:w-[396px]">
               {hero.description}
