@@ -28,35 +28,38 @@ export function AnimatedStrokeWord({ variant, children }: AnimatedStrokeWordProp
   const { viewBox, d, strokeWidth, box, gradient } = STROKES[variant];
   const gradientId = `stroke-${variant}`;
   return (
-    <span className="relative inline-block whitespace-nowrap">
+    <span className="whitespace-nowrap">
+      {/* Âncora vazia: no WebKit, texto em elemento posicionado some do background-clip do H1. */}
+      <span className="relative inline-block size-0 align-top">
+        <svg
+          aria-hidden="true"
+          viewBox={viewBox}
+          fill="none"
+          preserveAspectRatio="none"
+          className="pointer-events-none absolute overflow-visible"
+          style={box}
+        >
+          <defs>
+            <linearGradient
+              id={gradientId}
+              gradientUnits="userSpaceOnUse"
+              {...gradient}
+            >
+              <stop stopColor="#AC32E4" />
+              <stop offset="0.458" stopColor="#7918F2" />
+              <stop offset="1" stopColor="#4801FF" />
+            </linearGradient>
+          </defs>
+          <path
+            data-stroke-path={variant}
+            d={d}
+            stroke={`url(#${gradientId})`}
+            strokeWidth={strokeWidth}
+            strokeLinecap="round"
+          />
+        </svg>
+      </span>
       {children}
-      <svg
-        aria-hidden="true"
-        viewBox={viewBox}
-        fill="none"
-        preserveAspectRatio="none"
-        className="pointer-events-none absolute overflow-visible"
-        style={box}
-      >
-        <defs>
-          <linearGradient
-            id={gradientId}
-            gradientUnits="userSpaceOnUse"
-            {...gradient}
-          >
-            <stop stopColor="#AC32E4" />
-            <stop offset="0.458" stopColor="#7918F2" />
-            <stop offset="1" stopColor="#4801FF" />
-          </linearGradient>
-        </defs>
-        <path
-          data-stroke-path={variant}
-          d={d}
-          stroke={`url(#${gradientId})`}
-          strokeWidth={strokeWidth}
-          strokeLinecap="round"
-        />
-      </svg>
     </span>
   );
 }
