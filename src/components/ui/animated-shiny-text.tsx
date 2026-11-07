@@ -11,6 +11,8 @@ interface AnimatedTextProps extends React.HTMLAttributes<HTMLDivElement> {
   hoverEffect?: boolean;
   className?: string;
   textClassName?: string;
+  /** Fica no h1, para o aria-labelledby da seção apontar para o título. */
+  headingId?: string;
 }
 
 const AnimatedText = React.forwardRef<HTMLDivElement, AnimatedTextProps>(
@@ -22,6 +24,7 @@ const AnimatedText = React.forwardRef<HTMLDivElement, AnimatedTextProps>(
       hoverEffect = false,
       className,
       textClassName,
+      headingId,
       ...props
     },
     ref,
@@ -50,6 +53,7 @@ const AnimatedText = React.forwardRef<HTMLDivElement, AnimatedTextProps>(
       <div ref={ref} className={className} {...props}>
         <motion.h1
           ref={textRef}
+          id={headingId}
           className={cn(
             "motion-reduce:bg-none! motion-reduce:[-webkit-text-fill-color:#fff]!",
             textClassName,

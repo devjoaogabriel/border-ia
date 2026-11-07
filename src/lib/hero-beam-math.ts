@@ -83,3 +83,33 @@ export function stepBeamSpring(
     velocity + ((targetBendX - bendX) * SPRING_STIFFNESS - velocity * SPRING_DAMPING) * dt;
   return { bendX: bendX + nextVelocity * dt, velocity: nextVelocity };
 }
+
+// Topo da malha (60px) e a sobra atrás do card (28px), como no DotMatrixDecor.
+const MESH_TOP = 60;
+
+export interface ShaderVerticalMaskConfig {
+  halfH: number;
+  centerY: number;
+}
+
+/** Centro e meia-altura da máscara elíptica do shader, derivados da altura do canvas. */
+export function deriveShaderVerticalMask(height: number): ShaderVerticalMaskConfig {
+  const halfH = (height - MESH_TOP - BEAM_GEOMETRY.BEAM_OVERLAP) / 2;
+  return { halfH, centerY: MESH_TOP + halfH };
+}
+
+// Ponte entre card e feixe, fora do React para não gerar render a cada frame.
+// O card escreve os ângulos, o feixe grava a curva e o shader lê os dois.
+export const heroCardMotion = {
+  rotationX: 0,
+  rotationY: 0,
+  rotation: 0,
+  bendX: 0,
+  tipX: 0,
+  tipY: BEAM_REST_TIP,
+};
+
+/** Volta a ponte ao repouso: usado na desmontagem e entre testes. */
+export function resetHeroCardMotion(): void {
+  Object.assign(heroCardMotion, { rotationX: 0, rotationY: 0, rotation: 0, bendX: 0, tipX: 0, tipY: BEAM_REST_TIP });
+}

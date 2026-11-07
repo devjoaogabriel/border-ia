@@ -269,6 +269,12 @@ body {
       0 0 2.2em -0.2em color-mix(in srgb, var(--shine) 90%, transparent);
   }
 
+  /* Foco de teclado parado: o brilho aparece, mas o giro não fica rodando sem fim. */
+  .btn-shine:focus-visible:not(:hover)::before,
+  .btn-shine:focus-visible:not(:hover)::after {
+    animation-play-state: paused;
+  }
+
   .btn-shine:active::after {
     opacity: 0.8;
   }

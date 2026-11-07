@@ -6,6 +6,7 @@ import {
   advanceCursorMeshState,
   computeCentralDotAlpha,
   computeCursorCellAlpha,
+  computeCursorDprMetrics,
   createInitialCursorState,
   CURSOR_MESH_CONSTANTS as C,
   isValidCursorPointerType,
@@ -28,11 +29,18 @@ export function CursorDotMesh() {
     const ctx = canvas?.getContext("2d");
     if (!enabled || !canvas || !ctx) return;
 
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    canvas.width = C.PATCH * dpr;
-    canvas.height = C.PATCH * dpr;
-    ctx.scale(dpr, dpr);
-    ctx.fillStyle = C.COLOR;
+    // Trocar de monitor ou dar zoom muda o devicePixelRatio: o bitmap acompanha para não borrar.
+    let dpr = 0;
+    const syncDpr = () => {
+      const metrics = computeCursorDprMetrics(window.devicePixelRatio);
+      if (metrics.dpr === dpr) return;
+      dpr = metrics.dpr;
+      canvas.width = metrics.physicalSize;
+      canvas.height = metrics.physicalSize;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.fillStyle = C.COLOR;
+    };
+    syncDpr();
 
     const state = createInitialCursorState();
     let lastTime = 0;
@@ -103,12 +111,14 @@ export function CursorDotMesh() {
     // Clique sem mover, por exemplo logo depois de um Alt+Tab, também acorda a malha.
     window.addEventListener("pointerdown", onMove, { passive: true });
     window.addEventListener("blur", hide);
+    window.addEventListener("resize", syncDpr, { passive: true });
     html.addEventListener("pointerleave", hide);
     document.addEventListener("visibilitychange", onVisibility);
     return () => {
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("pointerdown", onMove);
       window.removeEventListener("blur", hide);
+      window.removeEventListener("resize", syncDpr);
       html.removeEventListener("pointerleave", hide);
       document.removeEventListener("visibilitychange", onVisibility);
       if (state.rafId !== -1) cancelAnimationFrame(state.rafId);

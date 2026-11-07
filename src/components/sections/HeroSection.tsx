@@ -20,7 +20,7 @@ export function HeroSection() {
         <div className="relative z-10 flex flex-col items-start gap-[15px] lg:w-[621px] lg:gap-6">
           <TagBadge>{hero.tag}</TagBadge>
           <AnimatedText
-            id="hero-heading"
+            headingId="hero-heading"
             data-m="hero-text"
             textClassName="t-h1 max-w-[9.7em]"
             text={

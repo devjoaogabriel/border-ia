@@ -71,3 +71,62 @@ describe("CSS e layout (CR-04 e CR-11)", () => {
     expect(features).not.toMatch(/\blg:whitespace-nowrap\b/);
   });
 });
+
+describe("cabeçalhos e dependências (NV-01, SA-INFO-01, SE-04)", () => {
+  const config = readFileSync(join(ROOT, "next.config.ts"), "utf8");
+
+  it("não anuncia o Next no X-Powered-By", () => {
+    expect(config).toMatch(/poweredByHeader:\s*false/);
+  });
+
+  it.each([
+    "X-Content-Type-Options",
+    "X-Frame-Options",
+    "Referrer-Policy",
+    "Permissions-Policy",
+    "Content-Security-Policy",
+  ])("envia %s em todas as rotas", (header) => {
+    expect(config).toMatch(/async headers\(\)/);
+    expect(config).toContain(`"${header}"`);
+  });
+
+  it("só libera eval na CSP em desenvolvimento", () => {
+    expect(config).toMatch(/isDev\s*\?\s*" 'unsafe-eval'"/);
+  });
+
+  it("mantém eslint 9+ e eslint-config-next 16+ (npm audit fix --force rebaixaria)", () => {
+    const pkg = JSON.parse(readFileSync(join(ROOT, "package.json"), "utf8"));
+    expect(Number(String(pkg.devDependencies["eslint-config-next"]).match(/\d+/)?.[0])).toBeGreaterThanOrEqual(16);
+    expect(Number(String(pkg.devDependencies.eslint).match(/\d+/)?.[0])).toBeGreaterThanOrEqual(9);
+  });
+});
+
+describe("acessibilidade e GPU (CR-09, CR-12, CR-13)", () => {
+  const src = (f: string) => readFileSync(join(ROOT, f), "utf8");
+
+  it("tem link para pular ao conteúdo no topo da página", () => {
+    expect(src("src/components/ui/SkipToContent.tsx")).toContain('href="#conteudo-principal"');
+    expect(src("src/app/page.tsx")).toMatch(/<SkipToContent \/>/);
+  });
+
+  it("o id do título do hero fica no h1", () => {
+    expect(src("src/components/ui/animated-shiny-text.tsx")).toMatch(/<motion\.h1[\s\S]{0,40}id=\{headingId\}/);
+    expect(src("src/components/sections/HeroSection.tsx")).toMatch(/headingId="hero-heading"/);
+  });
+
+  it("o shader não fixa a altura do canvas", () => {
+    expect(src("src/components/three/HeroBeamCanvas.tsx")).not.toMatch(/278\.5|218\.5/);
+  });
+
+  it("o logo 3D libera a geometria e escuta o ponteiro em modo passivo", () => {
+    const logo = src("src/components/three/PluginPrismLogo3D.tsx");
+    expect(logo).toMatch(/back\.dispose\(\)/);
+    expect(logo).toMatch(/front\.dispose\(\)/);
+    expect(logo).toMatch(/addEventListener\("pointermove", onMove, \{ passive: true \}\)/);
+    expect(logo).toMatch(/sanitizeSvgPathD\(/);
+  });
+
+  it("o giro do botão para com foco de teclado parado", () => {
+    expect(src("src/app/globals.css")).toMatch(/\.btn-shine:focus-visible:not\(:hover\)::before/);
+  });
+});

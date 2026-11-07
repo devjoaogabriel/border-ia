@@ -105,3 +105,14 @@ export function isValidCursorPointerType(pointerType: string | null | undefined)
 export function computeCentralDotAlpha(presence: number): number {
   return presence > 0 ? Math.min(1, Math.max(0.7, presence)) : 0;
 }
+
+export interface CursorCanvasDprMetrics {
+  dpr: number;
+  physicalSize: number;
+}
+
+/** Densidade do canvas do cursor, entre 1 e 2, e o tamanho do bitmap em pixels físicos. */
+export function computeCursorDprMetrics(rawDpr: number): CursorCanvasDprMetrics {
+  const dpr = Number.isFinite(rawDpr) ? Math.min(2, Math.max(1, rawDpr)) : 1;
+  return { dpr, physicalSize: C.PATCH * dpr };
+}

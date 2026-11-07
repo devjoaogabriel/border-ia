@@ -1,7 +1,7 @@
 "use client";
 
 import { Canvas, useFrame } from "@react-three/fiber";
-import { useMemo, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { NoBlending, type ShaderMaterial } from "three";
 import { beamPulse, heroCardMotion } from "@/lib/gsap";
 
@@ -60,7 +60,9 @@ const fragmentShader = /* glsl */ `
     // Máscara closest-side de 25%, igual ao CSS: gradiente sem borda reta.
     float inArea = step(-uMeshHalf, cellCenter.x) * step(cellCenter.x, uMeshHalf)
       * step(60.0, cellCenter.y) * step(cellCenter.y, uSize.y - 28.0);
-    vec2 maskUv = vec2(cellCenter.x / uMeshHalf, (cellCenter.y - 278.5) / 218.5);
+    // Mesma conta de deriveShaderVerticalMask: malha começa em 60px e para 28px antes da base.
+    float halfH = (uSize.y - 88.0) * 0.5;
+    vec2 maskUv = vec2(cellCenter.x / uMeshHalf, (cellCenter.y - (60.0 + halfH)) / halfH);
     float baseMask = clamp((1.0 - length(maskUv)) / 0.75, 0.0, 1.0) * inArea;
 
     // Onda contínua: desce ao longo do fio e se abre para os lados (período de ~3.14s).
@@ -102,8 +104,8 @@ function BeamPlane({
   meshHalfWidth: number;
 }) {
   const materialRef = useRef<ShaderMaterial>(null);
-  const uniforms = useMemo(
-    () => ({
+  // Objeto criado uma vez: o ShaderMaterial guarda a referência, e o efeito abaixo atualiza os valores pelo ref.
+  const [uniforms] = useState(() => ({
       uPulse: { value: 0 },
       uTime: { value: 0 },
       uSize: { value: [width, height] },
@@ -111,9 +113,14 @@ function BeamPlane({
       uTipX: { value: 0 },
       uTipY: { value: heroCardMotion.tipY },
       uMeshHalf: { value: meshHalfWidth },
-    }),
-    [width, height, meshHalfWidth],
-  );
+  }));
+
+  useEffect(() => {
+    const material = materialRef.current;
+    if (!material) return;
+    material.uniforms.uSize.value = [width, height];
+    material.uniforms.uMeshHalf.value = meshHalfWidth;
+  }, [width, height, meshHalfWidth]);
 
   useFrame(({ clock }) => {
     const material = materialRef.current;

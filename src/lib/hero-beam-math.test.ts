@@ -3,7 +3,10 @@ import {
   BEAM_GEOMETRY as G,
   BEAM_REST_PATH,
   beamPath,
+  deriveShaderVerticalMask,
+  heroCardMotion,
   projectBeamContact,
+  resetHeroCardMotion,
   stepBeamSpring,
 } from "@/lib/hero-beam-math";
 
@@ -82,5 +85,21 @@ describe("mola do meio do fio", () => {
   it("limita o passo a 0.05s e ignora passo negativo", () => {
     expect(stepBeamSpring(0, 0, 30, 9)).toEqual(stepBeamSpring(0, 0, 30, 0.05));
     expect(stepBeamSpring(4, 2, 30, -1)).toEqual({ bendX: 4, velocity: 2 });
+  });
+});
+
+describe("máscara vertical do shader (CR-12)", () => {
+  it("deriva centro e meia-altura da altura do canvas", () => {
+    expect(deriveShaderVerticalMask(525)).toEqual({ halfH: 218.5, centerY: 278.5 });
+    expect(deriveShaderVerticalMask(G.BEAM_HEIGHT)).toEqual({ halfH: 218.5, centerY: 278.5 });
+    expect(deriveShaderVerticalMask(600)).toEqual({ halfH: 256, centerY: 316 });
+  });
+});
+
+describe("estado compartilhado entre card e corda (CR-07)", () => {
+  it("resetHeroCardMotion volta tudo ao repouso", () => {
+    Object.assign(heroCardMotion, { rotationX: 7, rotationY: -3, rotation: 1, bendX: 40, tipX: 12, tipY: 480 });
+    resetHeroCardMotion();
+    expect(heroCardMotion).toEqual({ rotationX: 0, rotationY: 0, rotation: 0, bendX: 0, tipX: 0, tipY: G.BEAM_REST_TIP });
   });
 });

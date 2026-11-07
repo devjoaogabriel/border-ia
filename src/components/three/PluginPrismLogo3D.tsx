@@ -5,13 +5,14 @@ import { useEffect, useMemo, useRef } from "react";
 import { ExtrudeGeometry, type Group, MathUtils } from "three";
 import { SVGLoader } from "three/addons/loaders/SVGLoader.js";
 import { LOGO_MARK } from "@/lib/constants";
+import { sanitizeSvgPathD } from "@/lib/svg-path-sanitizer";
 
 const MAX_TILT = MathUtils.degToRad(4.5);
 const DEPTH = 5;
 
 function createPrism(d: string) {
   const [path] = new SVGLoader().parse(
-    `<svg xmlns="http://www.w3.org/2000/svg"><path d="${d}"/></svg>`,
+    `<svg xmlns="http://www.w3.org/2000/svg"><path d="${sanitizeSvgPathD(d)}"/></svg>`,
   ).paths;
   return new ExtrudeGeometry(path.toShapes(), {
     depth: DEPTH,
@@ -42,9 +43,18 @@ function Prisms({ burstSignal, canHover }: PrismsProps) {
       pointer.current.x = (event.clientX / window.innerWidth) * 2 - 1;
       pointer.current.y = (event.clientY / window.innerHeight) * 2 - 1;
     };
-    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointermove", onMove, { passive: true });
     return () => window.removeEventListener("pointermove", onMove);
   }, [canHover]);
+
+  // A geometria vive na GPU: sem dispose, cada remontagem deixa buffers para trás.
+  useEffect(
+    () => () => {
+      back.dispose();
+      front.dispose();
+    },
+    [back, front],
+  );
 
   useEffect(() => {
     if (burstSignal > 0) spin.current = Math.PI * 2;

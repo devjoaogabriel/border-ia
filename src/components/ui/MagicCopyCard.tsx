@@ -123,11 +123,16 @@ export function MagicCopyCard({ className = "" }: { className?: string }) {
           };
 
           // Medido no palco, que não inclina: a borda do hover não treme com o card.
+          // A medida fica guardada e só é refeita depois de scroll ou resize.
+          let box: DOMRect | null = null;
+          const invalidateBox = () => {
+            box = null;
+          };
           const onMove = (event: PointerEvent) => {
             if (event.pointerType !== "mouse") return;
             state = "hovering";
             balance.pause();
-            const box = stage.getBoundingClientRect();
+            box ??= stage.getBoundingClientRect();
             const normX = ((event.clientX - box.left) / box.width) * 2 - 1;
             const normY = ((event.clientY - box.top) / box.height) * 2 - 1;
             const overCta = buttonRef.current?.contains(event.target as Node);
@@ -160,7 +165,11 @@ export function MagicCopyCard({ className = "" }: { className?: string }) {
           stage.addEventListener("pointermove", onMove);
           stage.addEventListener("pointerleave", onLeave);
           window.addEventListener("blur", onLeave);
+          window.addEventListener("scroll", invalidateBox, { passive: true });
+          window.addEventListener("resize", invalidateBox, { passive: true });
           stopHover = () => {
+            window.removeEventListener("scroll", invalidateBox);
+            window.removeEventListener("resize", invalidateBox);
             stage.removeEventListener("pointerenter", onMove);
             stage.removeEventListener("pointermove", onMove);
             stage.removeEventListener("pointerleave", onLeave);

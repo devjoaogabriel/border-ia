@@ -5,6 +5,7 @@ import {
   createInitialCursorState,
   computeCentralDotAlpha,
   computeCursorCellAlpha,
+  computeCursorDprMetrics,
   isValidCursorPointerType,
   CURSOR_MESH_CONSTANTS as C,
 } from "@/lib/cursor-mesh-math";
@@ -121,5 +122,19 @@ describe("cursor com caneta e ponto de clique (CR-01)", () => {
     expect(computeCentralDotAlpha(0.05)).toBe(0.7);
     expect(computeCentralDotAlpha(0.9)).toBe(0.9);
     expect(computeCentralDotAlpha(1)).toBe(1);
+  });
+});
+
+describe("nitidez ao trocar de tela (CR-06)", () => {
+  it.each([
+    [1, 1, 88],
+    [1.5, 1.5, 132],
+    [2, 2, 176],
+    [3, 2, 176],
+    [0.5, 1, 88],
+    [0, 1, 88],
+    [Number.NaN, 1, 88],
+  ])("dpr %s vira %s, canvas de %spx", (raw, dpr, physicalSize) => {
+    expect(computeCursorDprMetrics(raw)).toEqual({ dpr, physicalSize });
   });
 });
