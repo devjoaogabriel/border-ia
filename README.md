@@ -191,6 +191,7 @@ border-ia/
 ├── tsconfig.json
 └── vitest.config.ts         # Configuracao de testes unitarios em ambiente node
 ```
+<!--
 
 ### Qualidade de Codigo e Seguranca
 - **Testes Unitarios com Vitest**: Logica matematica de animacao, molas fisicas, limites de tela e seguranca de links cobertos em suites de execucao rapida (< 2s).
@@ -234,7 +235,7 @@ border-ia/
    npm run build
    npm run start
    ```
-
+-->
 ---
 
 ## Creditos
